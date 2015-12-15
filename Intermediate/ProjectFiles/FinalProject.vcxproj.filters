@@ -1,46 +1,61 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-
 <Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-	<ItemGroup>
-		<None Include="..\..\FinalProject.uproject" />
-		<Filter Include="Source">
-			<UniqueIdentifier>{79CD3371-E2D4-4789-8872-AB65B1037FF6}</UniqueIdentifier>
-		</Filter>
-		<None Include="..\..\Source\FinalProject.Target.cs">
-			<Filter>Source</Filter>
-		</None >
-		<None Include="..\..\Source\FinalProjectEditor.Target.cs">
-			<Filter>Source</Filter>
-		</None >
-		<Filter Include="Config">
-			<UniqueIdentifier>{7A59A447-7358-4C75-88B4-B87743EBE009}</UniqueIdentifier>
-		</Filter>
-		<None Include="..\..\Config\DefaultEditor.ini">
-			<Filter>Config</Filter>
-		</None >
-		<None Include="..\..\Config\DefaultEngine.ini">
-			<Filter>Config</Filter>
-		</None >
-		<None Include="..\..\Config\DefaultGame.ini">
-			<Filter>Config</Filter>
-		</None >
-		<Filter Include="Source\FinalProject">
-			<UniqueIdentifier>{0C1E7A55-A1FC-4267-ADB1-8243145827BE}</UniqueIdentifier>
-		</Filter>
-		<ClCompile Include="..\..\Source\FinalProject\Boid.cpp">
-			<Filter>Source\FinalProject</Filter>
-		</ClCompile >
-		<ClInclude Include="..\..\Source\FinalProject\Boid.h">
-			<Filter>Source\FinalProject</Filter>
-		</ClInclude >
-		<None Include="..\..\Source\FinalProject\FinalProject.Build.cs">
-			<Filter>Source\FinalProject</Filter>
-		</None >
-		<ClCompile Include="..\..\Source\FinalProject\FinalProject.cpp">
-			<Filter>Source\FinalProject</Filter>
-		</ClCompile >
-		<ClInclude Include="..\..\Source\FinalProject\FinalProject.h">
-			<Filter>Source\FinalProject</Filter>
-		</ClInclude >
-	</ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\FinalProject.uproject" />
+    <Filter Include="Source">
+      <UniqueIdentifier>{5FBF8A5F-7087-4D97-8E41-C8ECD0C99316}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\FinalProject.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <None Include="..\..\Source\FinalProjectEditor.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <Filter Include="Config">
+      <UniqueIdentifier>{92E4048B-7C12-45E3-A79C-D11B1B06BAAD}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Config\DefaultEditor.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultEngine.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultGame.ini">
+      <Filter>Config</Filter>
+    </None>
+    <Filter Include="Source\FinalProject">
+      <UniqueIdentifier>{3209BB56-CDBA-42B3-9B2B-4D7DE39D4F0A}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\FinalProject\Boid.cpp">
+      <Filter>Source\FinalProject</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\FinalProject\Boid.h">
+      <Filter>Source\FinalProject</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\FinalProject\BoidController.cpp">
+      <Filter>Source\FinalProject</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\FinalProject\BoidController.h">
+      <Filter>Source\FinalProject</Filter>
+    </ClInclude>
+    <None Include="..\..\Source\FinalProject\FinalProject.Build.cs">
+      <Filter>Source\FinalProject</Filter>
+    </None>
+    <ClCompile Include="..\..\Source\FinalProject\FinalProject.cpp">
+      <Filter>Source\FinalProject</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\FinalProject\FinalProject.h">
+      <Filter>Source\FinalProject</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Source\FinalProject\FinalGameMode.h">
+      <Filter>Source\FinalProject</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Source\FinalProject\FinalGameMode.cpp">
+      <Filter>Source\FinalProject</Filter>
+    </ClCompile>
+  </ItemGroup>
 </Project>
