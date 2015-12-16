@@ -2,7 +2,6 @@
 
 #include "FinalProject.h"
 #include "Boid.h"
-//#include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
 ABoid::ABoid(const FObjectInitializer& ObjectInitializer)
@@ -25,7 +24,7 @@ ABoid::ABoid(const FObjectInitializer& ObjectInitializer)
 	// attach sphere for detecting nearby boids
 	USphereComponent* SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
 	SphereComponent->AttachTo(RootComponent);
-	SphereComponent->InitSphereRadius(10.0f);
+	SphereComponent->InitSphereRadius(20.0f);
 	SphereComponent->SetCollisionProfileName("BoidCollider");
 }
 
@@ -35,7 +34,7 @@ void ABoid::BeginPlay()
 	Super::BeginPlay();
 
 	// scale to be more easily visible
-	SetActorScale3D(FVector(20, 20, 20));
+	SetActorScale3D(FVector(15, 15, 15));
 
 	//initialise velocity
 	currentVelocity = FVector(FMath::RandRange(-5.0f, 5.0f), FMath::RandRange(-5.0f, 5.0f), FMath::RandRange(-5.0f, 5.0f));
@@ -91,7 +90,7 @@ FVector ABoid::CalculateBoidVelocity()
 	FVector alignment = AlignBoid(nearbyBoidRotations);
 	FVector cohesion = CohereBoid(nearbyBoidLocations);
 
-	return ((separation * 1) + (alignment * 1) + (cohesion * 1)) * 0.3;
+	return ((separation * 1) + (alignment * 3) + (cohesion * 1)) * 0.05;
 }
 
 FVector ABoid::SeparateBoid(std::vector<FVector> nearbyBoidLocations)
