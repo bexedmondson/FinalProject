@@ -1,5 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+#include <algorithm>
 #include "FinalProject.h"
 #include "Boid.h"
 
@@ -37,7 +38,7 @@ void ABoid::BeginPlay()
 	SetActorScale3D(FVector(15, 15, 15));
 
 	//initialise velocity
-	currentVelocity = FVector(FMath::RandRange(-5.0f, 5.0f), FMath::RandRange(-5.0f, 5.0f), FMath::RandRange(-5.0f, 5.0f));
+	currentVelocity = FVector(FMath::RandRange(-0.5f, 0.5f), FMath::RandRange(-0.5f, 0.5f), FMath::RandRange(-0.5f, 0.5f));
 
 	//initialise rotation
 	rotation = FRotator(0.0, 0.0, 0.0);
@@ -66,7 +67,8 @@ FVector ABoid::CalculateBoidVelocity()
 {
 	TArray<UPrimitiveComponent*> nearbyComponents;
 	GetOverlappingComponents(nearbyComponents);
-
+	
+	std::vector<AActor *> nearbyBoids = {};
 	std::vector<FVector> nearbyBoidLocations = {};
 	std::vector<FRotator> nearbyBoidRotations = {};
 
@@ -78,25 +80,37 @@ FVector ABoid::CalculateBoidVelocity()
 
 		if (colliderOwner->IsA(ABoid::StaticClass()))
 		{
-			FRotator colliderOwnerRotation = colliderOwner->GetActorRotation();
-			nearbyBoidRotations.push_back(colliderOwnerRotation);
-
-			FVector colliderOwnerLocation = colliderOwner->GetActorLocation();
-			nearbyBoidLocations.push_back(colliderOwnerLocation);
+			//if boid array doesn't already have the boid in it
+			if (std::find(nearbyBoids.begin(), nearbyBoids.end(), colliderOwner) != nearbyBoids.end()) {
+				nearbyBoids.push_back(colliderOwner);
+			}
 		}
 	}
+
+	for (int i = 0; i < nearbyBoids.size(); i++) {
+		FRotator colliderOwnerRotation = nearbyBoids[i]->GetActorRotation();
+		nearbyBoidRotations.push_back(colliderOwnerRotation);
+
+		FVector colliderOwnerLocation = nearbyBoids[i]->GetActorLocation();
+		nearbyBoidLocations.push_back(colliderOwnerLocation);
+	}
+
+	FString sizeString = FString::FromInt(nearbyBoidLocations.size());
+	
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, sizeString);
 
 	FVector separation = SeparateBoid(nearbyBoidLocations);
 	FVector alignment = AlignBoid(nearbyBoidRotations);
 	FVector cohesion = CohereBoid(nearbyBoidLocations);
 
-	return ((separation * 1) + (alignment * 3) + (cohesion * 1)) * 0.05;
+	return ((separation * 1) + (alignment * 1) + (cohesion * 1)) * 0.05;
 }
 
 FVector ABoid::SeparateBoid(std::vector<FVector> nearbyBoidLocations)
 {
-	FVector separationSteer = FVector(0, 0, 0);
 	FVector actorLocation = GetActorLocation();
+
+	FVector separationSteer = actorLocation - nearbyBoidLocations[0];
 
 	for (int i = 0; i < nearbyBoidLocations.size(); i++) {
 		FVector nbLocation = nearbyBoidLocations[i];
@@ -116,8 +130,9 @@ FVector ABoid::SeparateBoid(std::vector<FVector> nearbyBoidLocations)
 
 FVector ABoid::AlignBoid(std::vector<FRotator> nearbyBoidRotations)
 {
-	FRotator alignmentSteer = FRotator(0, 0, 0);
 	FRotator actorRotation = GetActorRotation();
+
+	FRotator alignmentSteer = nearbyBoidRotations[0] - actorRotation;
 
 	for (int i = 0; i < nearbyBoidRotations.size(); i++) {
 		FRotator nbRotation = nearbyBoidRotations[i];
@@ -132,11 +147,12 @@ FVector ABoid::AlignBoid(std::vector<FRotator> nearbyBoidRotations)
 
 FVector ABoid::CohereBoid(std::vector<FVector> nearbyBoidLocations)
 {
-	FVector totalLocations = FVector(0, 0, 0);
 	FVector cohesionSteer = FVector(0, 0, 0);
 	FVector actorLocation = GetActorLocation();
 
-	for (int i = 0; i < nearbyBoidLocations.size(); i++) {
+	FVector totalLocations = nearbyBoidLocations[0]; //WHAT IF IT'S EMPTY - TODO
+
+	for (int i = 1; i < nearbyBoidLocations.size(); i++) {
 		FVector nbLocation = nearbyBoidLocations[i];
 
 		if (actorLocation != nbLocation)
