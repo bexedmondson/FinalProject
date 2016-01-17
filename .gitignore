@@ -279,3 +279,6 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+Binaries/Win64/UE4Editor-FinalProject-1012.dll
+*.dll
+Saved/Autosaves/Game/Levels/LevelOne_Auto1.umap
