@@ -40,6 +40,8 @@ public:
 
 	void SetVelocity(FVector velocity);
 
+	FVector GetVelocity();
+
 
 protected:
 	UStaticMeshComponent* BoidMesh;

@@ -16,7 +16,7 @@ void ABoidController::BeginPlay()
 
 	World = GetWorld();
 
-	numOfBoids = 4;
+	numOfBoids = 40;
 	boidArray[numOfBoids] = {};
 
 	GenerateBoids();

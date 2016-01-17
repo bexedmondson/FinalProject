@@ -1,6 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include <algorithm>
 #include "FinalProject.h"
 #include "Boid.h"
 
@@ -25,7 +24,7 @@ ABoid::ABoid(const FObjectInitializer& ObjectInitializer)
 	// attach sphere for detecting nearby boids
 	USphereComponent* SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
 	SphereComponent->AttachTo(RootComponent);
-	SphereComponent->InitSphereRadius(20.0f);
+	SphereComponent->InitSphereRadius(5.0f);
 	SphereComponent->SetCollisionProfileName("BoidCollider");
 }
 
@@ -38,7 +37,8 @@ void ABoid::BeginPlay()
 	SetActorScale3D(FVector(15, 15, 15));
 
 	//initialise velocity
-	currentVelocity = FVector(FMath::RandRange(-0.5f, 0.5f), FMath::RandRange(-0.5f, 0.5f), FMath::RandRange(-0.5f, 0.5f));
+	//currentVelocity = FVector(FMath::RandRange(-0.5f, 0.5f), FMath::RandRange(-0.5f, 0.5f), FMath::RandRange(-0.5f, 0.5f));
+	currentVelocity = FVector(0, 0, 0);
 
 	//initialise rotation
 	rotation = FRotator(0.0, 0.0, 0.0);
@@ -59,8 +59,14 @@ void ABoid::Tick(float DeltaTime)
 	currentVelocity = totalVelocity;
 }
 
-void ABoid::SetVelocity(FVector velocity) {
+void ABoid::SetVelocity(FVector velocity) 
+{
 	newVelocity = velocity;
+}
+
+FVector ABoid::GetVelocity()
+{
+	return currentVelocity;
 }
 
 FVector ABoid::CalculateBoidVelocity()
@@ -81,11 +87,15 @@ FVector ABoid::CalculateBoidVelocity()
 		if (colliderOwner->IsA(ABoid::StaticClass()))
 		{
 			//if boid array doesn't already have the boid in it
-			if (std::find(nearbyBoids.begin(), nearbyBoids.end(), colliderOwner) != nearbyBoids.end()) {
+			if (std::find(nearbyBoids.begin(), nearbyBoids.end(), colliderOwner) == nearbyBoids.end()) {
 				nearbyBoids.push_back(colliderOwner);
 			}
 		}
 	}
+
+	FString numOfBoidsString = FString::FromInt(nearbyBoids.size());
+
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, numOfBoidsString);
 
 	for (int i = 0; i < nearbyBoids.size(); i++) {
 		FRotator colliderOwnerRotation = nearbyBoids[i]->GetActorRotation();
@@ -95,75 +105,121 @@ FVector ABoid::CalculateBoidVelocity()
 		nearbyBoidLocations.push_back(colliderOwnerLocation);
 	}
 
-	FString sizeString = FString::FromInt(nearbyBoidLocations.size());
-	
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, sizeString);
+	try
+	{
+		FVector separation = SeparateBoid(nearbyBoidLocations);
+		FVector alignment = AlignBoid(nearbyBoidRotations);
+		FVector cohesion = CohereBoid(nearbyBoidLocations);
 
-	FVector separation = SeparateBoid(nearbyBoidLocations);
-	FVector alignment = AlignBoid(nearbyBoidRotations);
-	FVector cohesion = CohereBoid(nearbyBoidLocations);
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, "NOT EMPTY");
 
-	return ((separation * 1) + (alignment * 1) + (cohesion * 1)) * 0.05;
+		return ((separation * 1) + (alignment * 1) + (cohesion * 1)) * 0.05;
+	}
+	catch (int e)
+	{
+		// if nearby boid array is empty
+		//FString errorNumberString = FString::FromInt(e);
+
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, errorNumberString);
+		e += 1;
+		return GetVelocity();
+	}
 }
 
 FVector ABoid::SeparateBoid(std::vector<FVector> nearbyBoidLocations)
 {
 	FVector actorLocation = GetActorLocation();
 
-	FVector separationSteer = actorLocation - nearbyBoidLocations[0];
-
-	for (int i = 0; i < nearbyBoidLocations.size(); i++) {
-		FVector nbLocation = nearbyBoidLocations[i];
-
-		if (actorLocation != nbLocation)
+	try 
+	{
+		if (nearbyBoidLocations.size() == 0)
 		{
-			//current location - other location because steering away from other location
-			FVector diff = actorLocation - nbLocation;
-
-			separationSteer += diff;
+			throw 10000;
 		}
-	}
 
-	//average out the steer
-	return separationSteer / nearbyBoidLocations.size();
+		FVector separationSteer = actorLocation - nearbyBoidLocations[0];
+
+		for (int i = 0; i < nearbyBoidLocations.size(); i++) {
+			FVector nbLocation = nearbyBoidLocations[i];
+
+			if (actorLocation != nbLocation)
+			{
+				//current location - other location because steering away from other location
+				FVector diff = actorLocation - nbLocation;
+
+				separationSteer += diff;
+			}
+		}
+
+		//average out the steer
+		return separationSteer / nearbyBoidLocations.size();
+	}
+	catch (int e)
+	{
+		throw e;
+	}
 }
 
 FVector ABoid::AlignBoid(std::vector<FRotator> nearbyBoidRotations)
 {
-	FRotator actorRotation = GetActorRotation();
+	try
+	{
+		if (nearbyBoidRotations.size() == 0)
+		{
+			throw 10000;
+		}
 
-	FRotator alignmentSteer = nearbyBoidRotations[0] - actorRotation;
+		FRotator actorRotation = GetActorRotation();
 
-	for (int i = 0; i < nearbyBoidRotations.size(); i++) {
-		FRotator nbRotation = nearbyBoidRotations[i];
+		FRotator alignmentSteer = nearbyBoidRotations[0] - actorRotation;
 
-		FRotator diff = nbRotation - actorRotation;
-		alignmentSteer += diff;
+		for (int i = 0; i < nearbyBoidRotations.size(); i++) {
+			FRotator nbRotation = nearbyBoidRotations[i];
+
+			FRotator diff = nbRotation - actorRotation;
+			alignmentSteer += diff;
+		}
+
+		//average out the alignment
+		return alignmentSteer.Vector() / nearbyBoidRotations.size();
 	}
-
-	//average out the alignment
-	return alignmentSteer.Vector() / nearbyBoidRotations.size();
+	catch (int e)
+	{		
+		throw e;
+	}
 }
 
 FVector ABoid::CohereBoid(std::vector<FVector> nearbyBoidLocations)
 {
-	FVector cohesionSteer = FVector(0, 0, 0);
-	FVector actorLocation = GetActorLocation();
-
-	FVector totalLocations = nearbyBoidLocations[0]; //WHAT IF IT'S EMPTY - TODO
-
-	for (int i = 1; i < nearbyBoidLocations.size(); i++) {
-		FVector nbLocation = nearbyBoidLocations[i];
-
-		if (actorLocation != nbLocation)
+	try
+	{
+		if (nearbyBoidLocations.size() == 0)
 		{
-			totalLocations += nbLocation;
+			throw 10000;
 		}
+
+		FVector cohesionSteer = FVector(0, 0, 0);
+		FVector actorLocation = GetActorLocation();
+
+		FVector totalLocations = nearbyBoidLocations[0]; //WHAT IF IT'S EMPTY - TODO
+
+		for (int i = 1; i < nearbyBoidLocations.size(); i++) {
+			FVector nbLocation = nearbyBoidLocations[i];
+
+			if (actorLocation != nbLocation)
+			{
+				totalLocations += nbLocation;
+			}
+		}
+
+		//average out the total and get the direction this boid should be steering in
+		cohesionSteer = (totalLocations / nearbyBoidLocations.size()) - actorLocation;
+
+		return cohesionSteer;
 	}
-
-	//average out the total and get the direction this boid should be steering in
-	cohesionSteer = (totalLocations / nearbyBoidLocations.size()) - actorLocation;
-
-	return cohesionSteer;
+	catch (int e)
+	{
+		throw e;
+	}
 }
 
