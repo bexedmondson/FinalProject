@@ -31,9 +31,7 @@ void ABoidController::Tick(float DeltaTime)
 
 	for (int i = 0; i < numOfBoids; i++)
 	{
-		FVector boidVelocity = boidArray[i]->CalculateBoidVelocity();
-
-		boidArray[i]->SetVelocity(boidVelocity);
+		//set goal point
 	}
 }
 

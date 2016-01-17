@@ -37,8 +37,8 @@ void ABoid::BeginPlay()
 	SetActorScale3D(FVector(15, 15, 15));
 
 	//initialise velocity
-	//currentVelocity = FVector(FMath::RandRange(-0.5f, 0.5f), FMath::RandRange(-0.5f, 0.5f), FMath::RandRange(-0.5f, 0.5f));
-	currentVelocity = FVector(0, 0, 0);
+	currentVelocity = FVector(FMath::RandRange(-0.5f, 0.5f), FMath::RandRange(-0.5f, 0.5f), FMath::RandRange(-0.5f, 0.5f));
+	//currentVelocity = FVector(0, 0, 0);
 
 	//initialise rotation
 	rotation = FRotator(0.0, 0.0, 0.0);
@@ -49,6 +49,8 @@ void ABoid::BeginPlay()
 void ABoid::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	newVelocity = CalculateBoidVelocity();
 
 	FVector totalVelocity = currentVelocity + newVelocity;
 
