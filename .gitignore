@@ -279,6 +279,11 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
-Binaries/Win64/UE4Editor-FinalProject-1012.dll
 *.dll
 Saved/Autosaves/Game/Levels/LevelOne_Auto1.umap
+Saved/HardwareSurvey/dxdiag.txt
+Saved/Autosaves/
+Saved/Logs/
+Saved/AutoScreenshot.png
+FinalProject.VC.opendb
+Intermediate/CachedAssetRegistry.bin
