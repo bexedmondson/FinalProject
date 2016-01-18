@@ -109,13 +109,9 @@ FVector ABoid::CalculateBoidVelocity()
 
 	try
 	{
-		FVector separation = SeparateBoid(nearbyBoidLocations);
-		FVector alignment = AlignBoid(nearbyBoidRotations);
-		FVector cohesion = CohereBoid(nearbyBoidLocations);
-
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, "NOT EMPTY");
 
-		return ((separation * 1) + (alignment * 1) + (cohesion * 1)) * 0.05;
+		return CohereBoid(nearbyBoidLocations) + AlignBoid(nearbyBoidRotations) + SeparateBoid(nearbyBoidLocations) * 0.001;
 	}
 	catch (int e)
 	{
@@ -134,7 +130,7 @@ FVector ABoid::SeparateBoid(std::vector<FVector> nearbyBoidLocations)
 
 	try 
 	{
-		if (nearbyBoidLocations.size() == 0)
+		if (nearbyBoidLocations.size() == 0) // fix!!
 		{
 			throw 10000;
 		}
@@ -164,26 +160,44 @@ FVector ABoid::SeparateBoid(std::vector<FVector> nearbyBoidLocations)
 
 FVector ABoid::AlignBoid(std::vector<FRotator> nearbyBoidRotations)
 {
+	FRotator actorRotation = GetActorRotation();
+	
 	try
 	{
-		if (nearbyBoidRotations.size() == 0)
+		if (nearbyBoidRotations.size() == 0) // fix!!
 		{
 			throw 10000;
 		}
 
-		FRotator actorRotation = GetActorRotation();
+		float yaw = actorRotation.Yaw;
+
+		FString errorNumberString = FString::FromInt(yaw);
+
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, errorNumberString);
 
 		FRotator alignmentSteer = nearbyBoidRotations[0] - actorRotation;
+		float totalPitch = nearbyBoidRotations[0].Pitch;
+		float totalYaw = nearbyBoidRotations[0].Yaw;
+		float totalRoll = nearbyBoidRotations[0].Roll;
 
 		for (int i = 0; i < nearbyBoidRotations.size(); i++) {
 			FRotator nbRotation = nearbyBoidRotations[i];
 
-			FRotator diff = nbRotation - actorRotation;
-			alignmentSteer += diff;
+			totalPitch += nbRotation.Pitch;
+			totalYaw += nbRotation.Yaw;
+			totalRoll += nbRotation.Roll;
 		}
 
 		//average out the alignment
-		return alignmentSteer.Vector() / nearbyBoidRotations.size();
+		totalPitch = totalPitch / nearbyBoidRotations.size();
+		totalYaw = totalYaw / nearbyBoidRotations.size();
+		totalRoll = totalRoll / nearbyBoidRotations.size();
+
+		alignmentSteer = FRotator(totalPitch - actorRotation.Pitch, 
+								  totalYaw - actorRotation.Yaw, 
+								  totalRoll - actorRotation.Roll);
+
+		return alignmentSteer.Vector();
 	}
 	catch (int e)
 	{		
@@ -193,31 +207,31 @@ FVector ABoid::AlignBoid(std::vector<FRotator> nearbyBoidRotations)
 
 FVector ABoid::CohereBoid(std::vector<FVector> nearbyBoidLocations)
 {
+	FVector actorLocation = GetActorLocation();
+	
 	try
 	{
 		if (nearbyBoidLocations.size() == 0)
 		{
-			throw 10000;
+			throw 10000; // fix!!
 		}
 
-		FVector cohesionSteer = FVector(0, 0, 0);
-		FVector actorLocation = GetActorLocation();
-
-		FVector totalLocations = nearbyBoidLocations[0]; //WHAT IF IT'S EMPTY - TODO
+		FVector cohesionSteer = nearbyBoidLocations[0] - actorLocation; // fix
 
 		for (int i = 1; i < nearbyBoidLocations.size(); i++) {
 			FVector nbLocation = nearbyBoidLocations[i];
 
 			if (actorLocation != nbLocation)
 			{
-				totalLocations += nbLocation;
+				//other location - current location because steering towards other location
+				FVector diff = nbLocation - actorLocation;
+
+				cohesionSteer += diff;
 			}
 		}
 
 		//average out the total and get the direction this boid should be steering in
-		cohesionSteer = (totalLocations / nearbyBoidLocations.size()) - actorLocation;
-
-		return cohesionSteer;
+		return cohesionSteer / nearbyBoidLocations.size();
 	}
 	catch (int e)
 	{
