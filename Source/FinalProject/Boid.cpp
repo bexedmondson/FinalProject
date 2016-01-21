@@ -5,9 +5,13 @@
 
 // constants for this file
 static const float OUTER_SPHERE_RADIUS = 10.0f;
-static const float INNER_SPHERE_RADIUS = 5.0f;
+static const float INNER_SPHERE_RADIUS = 50.0f;
 
-static const float ACTOR_SCALE = 15.0f;
+static const float ACTOR_SCALE = 12.0f;
+
+static const float SEPARATION_COEFFICIENT = 0.01;
+static const float ALIGNMENT_COEFFICIENT = 0.02;
+static const float COHESION_COEFFICIENT = 0.04;
 
 // sets default values
 ABoid::ABoid(const FObjectInitializer& ObjectInitializer)
@@ -102,29 +106,11 @@ FVector ABoid::CalculateBoidVelocity()
 
 	try
 	{
-		FVector s = SeparateBoid(immediateBoidLocations);
-		FVector a = AlignBoid(nearbyBoidRotations);
-		FVector c = CohereBoid(nearbyBoidLocations);
+		FVector s = SeparateBoid(immediateBoidLocations) * SEPARATION_COEFFICIENT;
+		FVector a = AlignBoid(nearbyBoidRotations) * ALIGNMENT_COEFFICIENT;
+		FVector c = CohereBoid(nearbyBoidLocations) * COHESION_COEFFICIENT;
 
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, "separation:");
-
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, FString::FromInt(s.Size()));
-
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, "alignment:");
-
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, FString::FromInt(a.Size()));
-
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, "cohesions");
-
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, FString::FromInt(c.Size()));
-
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, "total");
-
-		FVector total = s + a + c;
-
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, FString::FromInt(total.Size()));
-
-		return  total * 0.0001; // + CohereBoid(nearbyBoidLocations) + AlignBoid(nearbyBoidRotations) SeparateBoid(nearbyBoidLocations)
+		return s + a + c;
 	}
 	catch (int e)
 	{
@@ -178,12 +164,6 @@ FVector ABoid::AlignBoid(TArray<FRotator> nearbyBoidRotations)
 			throw 10000;
 		}
 
-		//float yaw = actorRotation.Yaw;
-
-		//FString errorNumberString = FString::FromInt(yaw);
-
-		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, errorNumberString);
-
 		FRotator alignmentSteer = nearbyBoidRotations[0] - actorRotation;
 		float totalPitch = nearbyBoidRotations[0].Pitch;
 		float totalYaw = nearbyBoidRotations[0].Yaw;
@@ -206,15 +186,7 @@ FVector ABoid::AlignBoid(TArray<FRotator> nearbyBoidRotations)
 								  totalYaw - actorRotation.Yaw, 
 								  totalRoll - actorRotation.Roll);
 
-		FVector alignVector = alignmentSteer.Vector();
-
-		float size = alignVector.Size();
-
-		FString errorNumberString = FString::FromInt(size);
-
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, errorNumberString);
-
-		return alignVector;
+		return alignmentSteer.Vector();
 	}
 	catch (int e)
 	{		
@@ -253,7 +225,7 @@ FVector ABoid::CohereBoid(TArray<FVector> nearbyBoidLocations)
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, errorNumberString);
 
 		//average out the total and get the direction this boid should be steering in
-		return cohesionSteer / nearbyBoidLocations.Num();
+		return cohesionSteer / nearbyBoidLocations.Num() * COHESION_COEFFICIENT;
 	}
 	catch (int e)
 	{
