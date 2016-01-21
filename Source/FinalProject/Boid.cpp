@@ -3,6 +3,7 @@
 #include "FinalProject.h"
 #include "Boid.h"
 
+
 // constants for this file
 static const float OUTER_SPHERE_RADIUS = 10.0f;
 static const float INNER_SPHERE_RADIUS = 50.0f;
@@ -12,6 +13,7 @@ static const float ACTOR_SCALE = 12.0f;
 static const float SEPARATION_COEFFICIENT = 0.01;
 static const float ALIGNMENT_COEFFICIENT = 0.02;
 static const float COHESION_COEFFICIENT = 0.04;
+
 
 // sets default values
 ABoid::ABoid(const FObjectInitializer& ObjectInitializer)
@@ -77,9 +79,11 @@ void ABoid::SetVelocity(FVector velocity)
 
 FVector ABoid::CalculateBoidVelocity()
 {
+	// get nearby objects
 	TArray<UPrimitiveComponent*> nearbyComponents;
 	GetOverlappingComponents(nearbyComponents);
 	
+	// initialise arrays to hold information
 	TArray<FVector> immediateBoidLocations;
 	TArray<FVector> nearbyBoidLocations;
 	TArray<FRotator> nearbyBoidRotations;
@@ -90,9 +94,9 @@ FVector ABoid::CalculateBoidVelocity()
 		UPrimitiveComponent* collidingComponent = nearbyComponents[i];
 		AActor* colliderOwner = collidingComponent->GetOwner();
 
+		// if it's a boid, add its info to the arrays
 		if (colliderOwner->IsA(ABoid::StaticClass()))
 		{
-			// if boid array doesn't already have the boid in it
 			nearbyBoidRotations.AddUnique(colliderOwner->GetActorRotation());
 			nearbyBoidLocations.AddUnique(colliderOwner->GetActorLocation());
 
@@ -104,132 +108,104 @@ FVector ABoid::CalculateBoidVelocity()
 		}
 	}
 
-	try
+	FVector total;
+
+	if (nearbyBoidLocations.Num() == 0)
 	{
+		// there are no nearby boids, keep going straight
+		return currentVelocity;
+	}
+	else if (immediateBoidLocations.Num() == 0)
+	{
+		// no boids to steer away from
+		FVector a = AlignBoid(nearbyBoidRotations) * ALIGNMENT_COEFFICIENT;
+		FVector c = CohereBoid(nearbyBoidLocations) * COHESION_COEFFICIENT;
+
+		total = a + c;
+	}
+	else
+	{
+		// everything is there, proceed normally
 		FVector s = SeparateBoid(immediateBoidLocations) * SEPARATION_COEFFICIENT;
 		FVector a = AlignBoid(nearbyBoidRotations) * ALIGNMENT_COEFFICIENT;
 		FVector c = CohereBoid(nearbyBoidLocations) * COHESION_COEFFICIENT;
 
-		return s + a + c;
+		total = s + a + c;
 	}
-	catch (int e)
-	{
-		e += 1;
-		return currentVelocity;
-	}
+
+	return total;
 }
 
 FVector ABoid::SeparateBoid(TArray<FVector> immediateBoidLocations)
 {
 	FVector actorLocation = GetActorLocation();
 
-	try 
-	{
-		if (immediateBoidLocations.Num() == 0) // fix!!
+	FVector separationSteer = actorLocation - immediateBoidLocations[0];
+
+	for (int i = 0; i < immediateBoidLocations.Num(); i++) {
+		FVector nbLocation = immediateBoidLocations[i];
+
+		if (actorLocation != nbLocation)
 		{
-			throw 10000;
+			//current location - other location because steering away from other location
+			FVector diff = actorLocation - nbLocation;
+
+			separationSteer += diff;
 		}
-
-		FVector separationSteer = actorLocation - immediateBoidLocations[0];
-
-		for (int i = 0; i < immediateBoidLocations.Num(); i++) {
-			FVector nbLocation = immediateBoidLocations[i];
-
-			if (actorLocation != nbLocation)
-			{
-				//current location - other location because steering away from other location
-				FVector diff = actorLocation - nbLocation;
-
-				separationSteer += diff;
-			}
-		}
-
-		//average out the steer
-		return separationSteer / immediateBoidLocations.Num();
 	}
-	catch (int e)
-	{
-		throw e;
-	}
+
+	//average out the steer
+	return separationSteer / immediateBoidLocations.Num();
 }
 
 FVector ABoid::AlignBoid(TArray<FRotator> nearbyBoidRotations)
 {
 	FRotator actorRotation = GetActorRotation();
 	
-	try
-	{
-		if (nearbyBoidRotations.Num() == 0) // fix!!
-		{
-			throw 10000;
-		}
+	FRotator alignmentSteer = nearbyBoidRotations[0] - actorRotation;
+	float totalPitch = nearbyBoidRotations[0].Pitch;
+	float totalYaw = nearbyBoidRotations[0].Yaw;
+	float totalRoll = nearbyBoidRotations[0].Roll;
 
-		FRotator alignmentSteer = nearbyBoidRotations[0] - actorRotation;
-		float totalPitch = nearbyBoidRotations[0].Pitch;
-		float totalYaw = nearbyBoidRotations[0].Yaw;
-		float totalRoll = nearbyBoidRotations[0].Roll;
+	for (int i = 0; i < nearbyBoidRotations.Num(); i++) {
+		FRotator nbRotation = nearbyBoidRotations[i];
 
-		for (int i = 0; i < nearbyBoidRotations.Num(); i++) {
-			FRotator nbRotation = nearbyBoidRotations[i];
-
-			totalPitch += nbRotation.Pitch;
-			totalYaw += nbRotation.Yaw;
-			totalRoll += nbRotation.Roll;
-		}
-
-		//average out the alignment
-		totalPitch = totalPitch / nearbyBoidRotations.Num();
-		totalYaw = totalYaw / nearbyBoidRotations.Num();
-		totalRoll = totalRoll / nearbyBoidRotations.Num();
-
-		alignmentSteer = FRotator(totalPitch - actorRotation.Pitch, 
-								  totalYaw - actorRotation.Yaw, 
-								  totalRoll - actorRotation.Roll);
-
-		return alignmentSteer.Vector();
+		totalPitch += nbRotation.Pitch;
+		totalYaw += nbRotation.Yaw;
+		totalRoll += nbRotation.Roll;
 	}
-	catch (int e)
-	{		
-		throw e;
-	}
+
+	//average out the alignment
+	totalPitch = totalPitch / nearbyBoidRotations.Num();
+	totalYaw = totalYaw / nearbyBoidRotations.Num();
+	totalRoll = totalRoll / nearbyBoidRotations.Num();
+
+	alignmentSteer = FRotator(totalPitch - actorRotation.Pitch, 
+								totalYaw - actorRotation.Yaw, 
+								totalRoll - actorRotation.Roll);
+
+	return alignmentSteer.Vector();
 }
 
 FVector ABoid::CohereBoid(TArray<FVector> nearbyBoidLocations)
 {
 	FVector actorLocation = GetActorLocation();
-	
-	try
-	{
-		if (nearbyBoidLocations.Num() == 0)
+
+	FVector cohesionSteer = nearbyBoidLocations[0] - actorLocation;
+
+	for (int i = 1; i < nearbyBoidLocations.Num(); i++) {
+		FVector nbLocation = nearbyBoidLocations[i];
+
+		if (actorLocation != nbLocation)
 		{
-			throw 10000; // fix!!
+			//other location - current location because steering towards other location
+			FVector diff = nbLocation - actorLocation;
+
+			cohesionSteer += diff;
 		}
-
-		FVector cohesionSteer = nearbyBoidLocations[0] - actorLocation; // fix
-
-		for (int i = 1; i < nearbyBoidLocations.Num(); i++) {
-			FVector nbLocation = nearbyBoidLocations[i];
-
-			if (actorLocation != nbLocation)
-			{
-				//other location - current location because steering towards other location
-				FVector diff = nbLocation - actorLocation;
-
-				cohesionSteer += diff;
-			}
-		}
-		float size = cohesionSteer.Size();
-
-		FString errorNumberString = FString::FromInt(size);
-
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, errorNumberString);
-
-		//average out the total and get the direction this boid should be steering in
-		return cohesionSteer / nearbyBoidLocations.Num() * COHESION_COEFFICIENT;
 	}
-	catch (int e)
-	{
-		throw e;
-	}
+
+	//average out the total and get the direction this boid should be steering in
+	return cohesionSteer / nearbyBoidLocations.Num() * COHESION_COEFFICIENT;
 }
 
