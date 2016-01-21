@@ -46,8 +46,8 @@ public:
 protected:
 	UStaticMeshComponent* BoidMesh;
 
-	FVector SeparateBoid(std::vector<FVector> nearbyBoidLocations);
-	FVector AlignBoid(std::vector<FRotator> nearbyBoidRotations);
-	FVector CohereBoid(std::vector<FVector> nearbyBoidLocations);
+	FVector SeparateBoid(TArray<FVector> nearbyBoidLocations);
+	FVector AlignBoid(TArray<FRotator> nearbyBoidRotations);
+	FVector CohereBoid(TArray<FVector> nearbyBoidLocations);
 
 };

@@ -3,11 +3,11 @@
 #include "FinalProject.h"
 #include "Boid.h"
 
-// Sets default values
+// sets default values
 ABoid::ABoid(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
-	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// set this actor to call Tick() every frame.
 	PrimaryActorTick.bCanEverTick = true;
 
 	// static mesh for visualisation
@@ -24,11 +24,11 @@ ABoid::ABoid(const FObjectInitializer& ObjectInitializer)
 	// attach sphere for detecting nearby boids
 	USphereComponent* SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
 	SphereComponent->AttachTo(RootComponent);
-	SphereComponent->InitSphereRadius(5.0f);
+	SphereComponent->InitSphereRadius(10.0f);
 	SphereComponent->SetCollisionProfileName("BoidCollider");
 }
 
-// Called when the game starts or when spawned
+// called when the game starts or when spawned
 void ABoid::BeginPlay()
 {
 	Super::BeginPlay();
@@ -38,7 +38,6 @@ void ABoid::BeginPlay()
 
 	//initialise velocity
 	currentVelocity = FVector(FMath::RandRange(-0.5f, 0.5f), FMath::RandRange(-0.5f, 0.5f), FMath::RandRange(-0.5f, 0.5f));
-	//currentVelocity = FVector(0, 0, 0);
 
 	//initialise rotation
 	rotation = FRotator(0.0, 0.0, 0.0);
@@ -76,9 +75,9 @@ FVector ABoid::CalculateBoidVelocity()
 	TArray<UPrimitiveComponent*> nearbyComponents;
 	GetOverlappingComponents(nearbyComponents);
 	
-	std::vector<AActor *> nearbyBoids = {};
-	std::vector<FVector> nearbyBoidLocations = {};
-	std::vector<FRotator> nearbyBoidRotations = {};
+	TArray<FVector> immediateBoidLocations;
+	TArray<FVector> nearbyBoidLocations;
+	TArray<FRotator> nearbyBoidRotations;
 
 	// iterate over components to find only the boids
 	for (int i = 0; i < nearbyComponents.Num(); i++)
@@ -88,57 +87,66 @@ FVector ABoid::CalculateBoidVelocity()
 
 		if (colliderOwner->IsA(ABoid::StaticClass()))
 		{
-			//if boid array doesn't already have the boid in it
-			if (std::find(nearbyBoids.begin(), nearbyBoids.end(), colliderOwner) == nearbyBoids.end()) {
-				nearbyBoids.push_back(colliderOwner);
+			// if boid array doesn't already have the boid in it
+			nearbyBoidRotations.AddUnique(colliderOwner->GetActorRotation());
+			nearbyBoidLocations.AddUnique(colliderOwner->GetActorLocation());
+
+			// if distance is below threshold, add to closer boid array
+			if (GetDistanceTo(colliderOwner) < 5.0f)
+			{
+				immediateBoidLocations.AddUnique(colliderOwner->GetActorLocation());
 			}
 		}
 	}
 
-	FString numOfBoidsString = FString::FromInt(nearbyBoids.size());
-
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, numOfBoidsString);
-
-	for (int i = 0; i < nearbyBoids.size(); i++) {
-		FRotator colliderOwnerRotation = nearbyBoids[i]->GetActorRotation();
-		nearbyBoidRotations.push_back(colliderOwnerRotation);
-
-		FVector colliderOwnerLocation = nearbyBoids[i]->GetActorLocation();
-		nearbyBoidLocations.push_back(colliderOwnerLocation);
-	}
-
 	try
 	{
-		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, "NOT EMPTY");
+		FVector s = SeparateBoid(immediateBoidLocations);
+		FVector a = AlignBoid(nearbyBoidRotations);
+		FVector c = CohereBoid(nearbyBoidLocations);
 
-		return CohereBoid(nearbyBoidLocations) + AlignBoid(nearbyBoidRotations) + SeparateBoid(nearbyBoidLocations) * 0.001;
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, "separation:");
+
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, FString::FromInt(s.Size()));
+
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, "alignment:");
+
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, FString::FromInt(a.Size()));
+
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, "cohesions");
+
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, FString::FromInt(c.Size()));
+
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, "total");
+
+		FVector total = s + a + c;
+
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, FString::FromInt(total.Size()));
+
+		return  total * 0.0001; // + CohereBoid(nearbyBoidLocations) + AlignBoid(nearbyBoidRotations) SeparateBoid(nearbyBoidLocations)
 	}
 	catch (int e)
 	{
-		// if nearby boid array is empty
-		//FString errorNumberString = FString::FromInt(e);
-
-		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, errorNumberString);
 		e += 1;
 		return GetVelocity();
 	}
 }
 
-FVector ABoid::SeparateBoid(std::vector<FVector> nearbyBoidLocations)
+FVector ABoid::SeparateBoid(TArray<FVector> immediateBoidLocations)
 {
 	FVector actorLocation = GetActorLocation();
 
 	try 
 	{
-		if (nearbyBoidLocations.size() == 0) // fix!!
+		if (immediateBoidLocations.Num() == 0) // fix!!
 		{
 			throw 10000;
 		}
 
-		FVector separationSteer = actorLocation - nearbyBoidLocations[0];
+		FVector separationSteer = actorLocation - immediateBoidLocations[0];
 
-		for (int i = 0; i < nearbyBoidLocations.size(); i++) {
-			FVector nbLocation = nearbyBoidLocations[i];
+		for (int i = 0; i < immediateBoidLocations.Num(); i++) {
+			FVector nbLocation = immediateBoidLocations[i];
 
 			if (actorLocation != nbLocation)
 			{
@@ -150,7 +158,7 @@ FVector ABoid::SeparateBoid(std::vector<FVector> nearbyBoidLocations)
 		}
 
 		//average out the steer
-		return separationSteer / nearbyBoidLocations.size();
+		return separationSteer / immediateBoidLocations.Num();
 	}
 	catch (int e)
 	{
@@ -158,20 +166,20 @@ FVector ABoid::SeparateBoid(std::vector<FVector> nearbyBoidLocations)
 	}
 }
 
-FVector ABoid::AlignBoid(std::vector<FRotator> nearbyBoidRotations)
+FVector ABoid::AlignBoid(TArray<FRotator> nearbyBoidRotations)
 {
 	FRotator actorRotation = GetActorRotation();
 	
 	try
 	{
-		if (nearbyBoidRotations.size() == 0) // fix!!
+		if (nearbyBoidRotations.Num() == 0) // fix!!
 		{
 			throw 10000;
 		}
 
-		float yaw = actorRotation.Yaw;
+		//float yaw = actorRotation.Yaw;
 
-		FString errorNumberString = FString::FromInt(yaw);
+		//FString errorNumberString = FString::FromInt(yaw);
 
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, errorNumberString);
 
@@ -180,7 +188,7 @@ FVector ABoid::AlignBoid(std::vector<FRotator> nearbyBoidRotations)
 		float totalYaw = nearbyBoidRotations[0].Yaw;
 		float totalRoll = nearbyBoidRotations[0].Roll;
 
-		for (int i = 0; i < nearbyBoidRotations.size(); i++) {
+		for (int i = 0; i < nearbyBoidRotations.Num(); i++) {
 			FRotator nbRotation = nearbyBoidRotations[i];
 
 			totalPitch += nbRotation.Pitch;
@@ -189,15 +197,23 @@ FVector ABoid::AlignBoid(std::vector<FRotator> nearbyBoidRotations)
 		}
 
 		//average out the alignment
-		totalPitch = totalPitch / nearbyBoidRotations.size();
-		totalYaw = totalYaw / nearbyBoidRotations.size();
-		totalRoll = totalRoll / nearbyBoidRotations.size();
+		totalPitch = totalPitch / nearbyBoidRotations.Num();
+		totalYaw = totalYaw / nearbyBoidRotations.Num();
+		totalRoll = totalRoll / nearbyBoidRotations.Num();
 
 		alignmentSteer = FRotator(totalPitch - actorRotation.Pitch, 
 								  totalYaw - actorRotation.Yaw, 
 								  totalRoll - actorRotation.Roll);
 
-		return alignmentSteer.Vector();
+		FVector alignVector = alignmentSteer.Vector();
+
+		float size = alignVector.Size();
+
+		FString errorNumberString = FString::FromInt(size);
+
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, errorNumberString);
+
+		return alignVector;
 	}
 	catch (int e)
 	{		
@@ -205,20 +221,20 @@ FVector ABoid::AlignBoid(std::vector<FRotator> nearbyBoidRotations)
 	}
 }
 
-FVector ABoid::CohereBoid(std::vector<FVector> nearbyBoidLocations)
+FVector ABoid::CohereBoid(TArray<FVector> nearbyBoidLocations)
 {
 	FVector actorLocation = GetActorLocation();
 	
 	try
 	{
-		if (nearbyBoidLocations.size() == 0)
+		if (nearbyBoidLocations.Num() == 0)
 		{
 			throw 10000; // fix!!
 		}
 
 		FVector cohesionSteer = nearbyBoidLocations[0] - actorLocation; // fix
 
-		for (int i = 1; i < nearbyBoidLocations.size(); i++) {
+		for (int i = 1; i < nearbyBoidLocations.Num(); i++) {
 			FVector nbLocation = nearbyBoidLocations[i];
 
 			if (actorLocation != nbLocation)
@@ -229,9 +245,14 @@ FVector ABoid::CohereBoid(std::vector<FVector> nearbyBoidLocations)
 				cohesionSteer += diff;
 			}
 		}
+		float size = cohesionSteer.Size();
+
+		FString errorNumberString = FString::FromInt(size);
+
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, errorNumberString);
 
 		//average out the total and get the direction this boid should be steering in
-		return cohesionSteer / nearbyBoidLocations.size();
+		return cohesionSteer / nearbyBoidLocations.Num();
 	}
 	catch (int e)
 	{
