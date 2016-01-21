@@ -288,3 +288,6 @@ Saved/AutoScreenshot.png
 FinalProject.VC.opendb
 Intermediate/CachedAssetRegistry.bin
 Intermediate/CachedAssetRegistry.bin
+*.bin
+*.ini
+Saved/Autosaves/PackageRestoreData.json
