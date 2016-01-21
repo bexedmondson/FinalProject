@@ -3,6 +3,12 @@
 #include "FinalProject.h"
 #include "Boid.h"
 
+// constants for this file
+static const float OUTER_SPHERE_RADIUS = 10.0f;
+static const float INNER_SPHERE_RADIUS = 5.0f;
+
+static const float ACTOR_SCALE = 15.0f;
+
 // sets default values
 ABoid::ABoid(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
@@ -24,7 +30,7 @@ ABoid::ABoid(const FObjectInitializer& ObjectInitializer)
 	// attach sphere for detecting nearby boids
 	USphereComponent* SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
 	SphereComponent->AttachTo(RootComponent);
-	SphereComponent->InitSphereRadius(10.0f);
+	SphereComponent->InitSphereRadius(OUTER_SPHERE_RADIUS);
 	SphereComponent->SetCollisionProfileName("BoidCollider");
 }
 
@@ -34,7 +40,7 @@ void ABoid::BeginPlay()
 	Super::BeginPlay();
 
 	// scale to be more easily visible
-	SetActorScale3D(FVector(15, 15, 15));
+	SetActorScale3D(FVector(ACTOR_SCALE, ACTOR_SCALE, ACTOR_SCALE));
 
 	//initialise velocity
 	currentVelocity = FVector(FMath::RandRange(-0.5f, 0.5f), FMath::RandRange(-0.5f, 0.5f), FMath::RandRange(-0.5f, 0.5f));
@@ -65,11 +71,6 @@ void ABoid::SetVelocity(FVector velocity)
 	newVelocity = velocity;
 }
 
-FVector ABoid::GetVelocity()
-{
-	return currentVelocity;
-}
-
 FVector ABoid::CalculateBoidVelocity()
 {
 	TArray<UPrimitiveComponent*> nearbyComponents;
@@ -92,7 +93,7 @@ FVector ABoid::CalculateBoidVelocity()
 			nearbyBoidLocations.AddUnique(colliderOwner->GetActorLocation());
 
 			// if distance is below threshold, add to closer boid array
-			if (GetDistanceTo(colliderOwner) < 5.0f)
+			if (GetDistanceTo(colliderOwner) < INNER_SPHERE_RADIUS)
 			{
 				immediateBoidLocations.AddUnique(colliderOwner->GetActorLocation());
 			}
@@ -128,7 +129,7 @@ FVector ABoid::CalculateBoidVelocity()
 	catch (int e)
 	{
 		e += 1;
-		return GetVelocity();
+		return currentVelocity;
 	}
 }
 
