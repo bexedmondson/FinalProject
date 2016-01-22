@@ -279,3 +279,15 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+*.dll
+Saved/Autosaves/Game/Levels/LevelOne_Auto1.umap
+Saved/HardwareSurvey/dxdiag.txt
+Saved/Autosaves/
+Saved/Logs/
+Saved/AutoScreenshot.png
+FinalProject.VC.opendb
+Intermediate/CachedAssetRegistry.bin
+Intermediate/CachedAssetRegistry.bin
+*.bin
+*.ini
+Saved/Autosaves/PackageRestoreData.json

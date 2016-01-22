@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include <vector>
 #include "GameFramework/Actor.h"
 #include "Boid.generated.h"
 
@@ -16,17 +15,16 @@ public:
 	ABoid(const FObjectInitializer& ObjectInitializer);
 
 
-
 	/** Boid current movement component */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Movement)
 		FVector currentVelocity;
 
 	/** Boid new movement component */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Movement)
 		FVector newVelocity;
 
 	/** Boid rotation component */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Movement)
 		FRotator rotation;
 
 
@@ -44,8 +42,8 @@ public:
 protected:
 	UStaticMeshComponent* BoidMesh;
 
-	FVector SeparateBoid(std::vector<FVector> nearbyBoidLocations);
-	FVector AlignBoid(std::vector<FRotator> nearbyBoidRotations);
-	FVector CohereBoid(std::vector<FVector> nearbyBoidLocations);
+	FVector SeparateBoid(TArray<FVector> nearbyBoidLocations);
+	FVector AlignBoid(TArray<FRotator> nearbyBoidRotations);
+	FVector CohereBoid(TArray<FVector> nearbyBoidLocations);
 
 };
