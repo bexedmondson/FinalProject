@@ -11,8 +11,9 @@ static const float INNER_SPHERE_RADIUS = 50.0f;
 static const float ACTOR_SCALE = 12.0f;
 
 static const float SEPARATION_COEFFICIENT = 0.01;
-static const float ALIGNMENT_COEFFICIENT = 0.02;
+static const float ALIGNMENT_COEFFICIENT = 0.03;
 static const float COHESION_COEFFICIENT = 0.04;
+static const float BOUNDING_BOX_COEFFICIENT = 0.01;
 
 
 // sets default values
@@ -54,6 +55,8 @@ void ABoid::BeginPlay()
 	//initialise rotation
 	rotation = FRotator(0.0, 0.0, 0.0);
 
+	//initialise bounding box
+	boundingBoxCorner = FVector(0, 0, 0);
 }
 
 // Called every frame
@@ -126,11 +129,19 @@ FVector ABoid::CalculateBoidVelocity()
 	else
 	{
 		// everything is there, proceed normally
-		FVector s = SeparateBoid(immediateBoidLocations) * SEPARATION_COEFFICIENT;
-		FVector a = AlignBoid(nearbyBoidRotations) * ALIGNMENT_COEFFICIENT;
-		FVector c = CohereBoid(nearbyBoidLocations) * COHESION_COEFFICIENT;
+		FVector s = SeparateBoid(immediateBoidLocations);
+		FVector a = AlignBoid(nearbyBoidRotations);
+		FVector c = CohereBoid(nearbyBoidLocations);
+		FVector b = KeepBoidInBox();
 
-		total = s + a + c;
+		FString sep = s.ToString();
+		FString ali = s.ToString();
+		FString coh = s.ToString();
+		FString box = s.ToString();
+
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, "sep " + sep + " ali " + ali + " coh " + coh + " box " + box);
+
+		total = s * SEPARATION_COEFFICIENT + a * ALIGNMENT_COEFFICIENT + c * COHESION_COEFFICIENT + b * BOUNDING_BOX_COEFFICIENT;
 	}
 
 	return total;
@@ -155,7 +166,7 @@ FVector ABoid::SeparateBoid(TArray<FVector> immediateBoidLocations)
 	}
 
 	//average out the steer
-	return separationSteer / immediateBoidLocations.Num();
+	return (separationSteer / immediateBoidLocations.Num()).GetClampedToMaxSize(5);
 }
 
 FVector ABoid::AlignBoid(TArray<FRotator> nearbyBoidRotations)
@@ -184,7 +195,7 @@ FVector ABoid::AlignBoid(TArray<FRotator> nearbyBoidRotations)
 								totalYaw - actorRotation.Yaw, 
 								totalRoll - actorRotation.Roll);
 
-	return alignmentSteer.Vector();
+	return (alignmentSteer.Vector()).GetClampedToMaxSize(5);
 }
 
 FVector ABoid::CohereBoid(TArray<FVector> nearbyBoidLocations)
@@ -206,6 +217,25 @@ FVector ABoid::CohereBoid(TArray<FVector> nearbyBoidLocations)
 	}
 
 	//average out the total and get the direction this boid should be steering in
-	return cohesionSteer / nearbyBoidLocations.Num() * COHESION_COEFFICIENT;
+	return (cohesionSteer / nearbyBoidLocations.Num()).GetClampedToMaxSize(5);
 }
 
+FVector ABoid::KeepBoidInBox()
+{
+	FVector actorLocation = GetActorLocation();
+
+	FVector boxSteer = FVector(0, 0, 0);
+
+	FVector oppositeCorner = FVector(boundingBoxCorner);
+
+	oppositeCorner += FVector(300, 300, 300);
+
+	FBox boundingBox = FBox(boundingBoxCorner, oppositeCorner);
+
+	if (!boundingBox.IsInside(actorLocation))
+	{
+		boxSteer = boundingBox.GetCenter() - actorLocation;
+	}
+
+	return boxSteer.GetClampedToMaxSize(5);
+}
