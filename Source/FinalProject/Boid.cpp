@@ -10,8 +10,8 @@ static const float INNER_SPHERE_RADIUS = 50.0f;
 
 static const float ACTOR_SCALE = 12.0f;
 
-static const float SEPARATION_COEFFICIENT = 0.01;
-static const float ALIGNMENT_COEFFICIENT = 0.03;
+static const float SEPARATION_COEFFICIENT = 0.07;
+static const float ALIGNMENT_COEFFICIENT = 0.04;
 static const float COHESION_COEFFICIENT = 0.04;
 static const float BOUNDING_BOX_COEFFICIENT = 0.05;
 
@@ -66,13 +66,15 @@ void ABoid::Tick(float DeltaTime)
 
 	newVelocity = CalculateBoidVelocity();
 
-	FVector totalVelocity = currentVelocity + newVelocity;
+	FVector totalVelocity = (currentVelocity + newVelocity).GetClampedToMaxSize(5);
 
 	rotation = totalVelocity.Rotation();
 
 	SetActorLocationAndRotation(GetActorLocation() + totalVelocity, rotation);
 
 	currentVelocity = totalVelocity;
+
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, "cur vel " + currentVelocity.ToString());
 }
 
 void ABoid::SetVelocity(FVector velocity) 
@@ -115,16 +117,19 @@ FVector ABoid::CalculateBoidVelocity()
 
 	if (nearbyBoidLocations.Num() == 0)
 	{
-		// there are no nearby boids, keep going straight
-		return currentVelocity;
+		// there are no nearby boids, just stay in box
+		FVector b = KeepBoidInBox();
+
+		total = b;
 	}
 	else if (immediateBoidLocations.Num() == 0)
 	{
 		// no boids to steer away from
 		FVector a = AlignBoid(nearbyBoidRotations) * ALIGNMENT_COEFFICIENT;
 		FVector c = CohereBoid(nearbyBoidLocations) * COHESION_COEFFICIENT;
+		FVector b = KeepBoidInBox();
 
-		total = a + c;
+		total = a + c + b;
 	}
 	else
 	{
@@ -141,7 +146,7 @@ FVector ABoid::CalculateBoidVelocity()
 
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, "sep " + sep + " ali " + ali + " coh " + coh + " box " + box);
 
-		total = (s * SEPARATION_COEFFICIENT + a * ALIGNMENT_COEFFICIENT + c * COHESION_COEFFICIENT + b * BOUNDING_BOX_COEFFICIENT).GetClampedToMaxSize(5);
+		total = (s * SEPARATION_COEFFICIENT + a * ALIGNMENT_COEFFICIENT + c * COHESION_COEFFICIENT + b * BOUNDING_BOX_COEFFICIENT);
 	}
 
 	return total;
