@@ -15,6 +15,10 @@ static const float ALIGNMENT_COEFFICIENT = 0.04;
 static const float COHESION_COEFFICIENT = 0.04;
 static const float BOUNDING_BOX_COEFFICIENT = 0.05;
 
+static const float MAX_SPEED = 4;
+
+static const float BOUNDING_BOX_SIZE = 150;
+
 
 // sets default values
 ABoid::ABoid(const FObjectInitializer& ObjectInitializer)
@@ -56,7 +60,7 @@ void ABoid::BeginPlay()
 	rotation = FRotator(0.0, 0.0, 0.0);
 
 	//initialise bounding box
-	boundingBoxCorner = FVector(-200, -200, -200);
+	boundingBoxCorner = FVector(-50, -50, -50);
 }
 
 // Called every frame
@@ -66,7 +70,7 @@ void ABoid::Tick(float DeltaTime)
 
 	newVelocity = CalculateBoidVelocity();
 
-	FVector totalVelocity = (currentVelocity + newVelocity).GetClampedToMaxSize(5);
+	FVector totalVelocity = (currentVelocity + newVelocity).GetClampedToMaxSize(MAX_SPEED);
 
 	rotation = totalVelocity.Rotation();
 
@@ -222,7 +226,7 @@ FVector ABoid::KeepBoidInBox()
 
 	FVector boxSteer = FVector(0, 0, 0);
 
-	FBox boundingBox = FBox(boundingBoxCorner, boundingBoxCorner + 400);
+	FBox boundingBox = FBox(boundingBoxCorner, boundingBoxCorner + BOUNDING_BOX_SIZE);
 
 	if (!boundingBox.IsInside(actorLocation))
 	{

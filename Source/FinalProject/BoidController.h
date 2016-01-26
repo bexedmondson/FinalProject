@@ -24,9 +24,6 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaSeconds) override;
 
-	//number of boids to be spawned
-	int numOfBoids;
-
 protected:
 	UWorld* World;
 
