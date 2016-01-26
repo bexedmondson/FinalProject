@@ -4,6 +4,10 @@
 #include "BoidController.h"
 #include "Boid.h"
 
+// constants for this file
+static const int NUMBER_OF_BOIDS = 30; //number of boids to be spawned
+static const int SPAWN_CUBE_SIZE = 200; //length of side of boid spawn cube DIVIDED BY TWO
+
 ABoidController::ABoidController(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
@@ -16,8 +20,7 @@ void ABoidController::BeginPlay()
 
 	World = GetWorld();
 
-	numOfBoids = 30;
-	boidArray[numOfBoids] = {};
+	boidArray[NUMBER_OF_BOIDS] = {};
 
 	GenerateBoids();
 
@@ -29,7 +32,7 @@ void ABoidController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	for (int i = 0; i < numOfBoids; i++)
+	for (int i = 0; i < NUMBER_OF_BOIDS; i++)
 	{
 		//set goal point
 	}
@@ -41,12 +44,12 @@ void ABoidController::GenerateBoids() {
 	FVector boidLocation = FVector();
 	FRotator boidRotation = FRotator();
 
-	for (int i = 0; i < numOfBoids; i++)
+	for (int i = 0; i < NUMBER_OF_BOIDS; i++)
 	{
 		//generate random numbers for location
-		int randNumX = rand() % (200 - -200 + 1) + -200;
-		int randNumY = rand() % (200 - -200 + 1) + -200;
-		int randNumZ = rand() % (200 - -200 + 1) + -200;
+		int randNumX = rand() % (SPAWN_CUBE_SIZE - -SPAWN_CUBE_SIZE + 1) + -SPAWN_CUBE_SIZE;
+		int randNumY = rand() % (SPAWN_CUBE_SIZE - -SPAWN_CUBE_SIZE + 1) + -SPAWN_CUBE_SIZE;
+		int randNumZ = rand() % (SPAWN_CUBE_SIZE - -SPAWN_CUBE_SIZE + 1) + -SPAWN_CUBE_SIZE;
 
 		//randomise spawn point and rotation
 		boidLocation = FVector(randNumX, randNumY, randNumZ);
