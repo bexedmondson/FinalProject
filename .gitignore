@@ -291,3 +291,5 @@ Intermediate/CachedAssetRegistry.bin
 *.bin
 *.ini
 Saved/Autosaves/PackageRestoreData.json
+Intermediate/CachedAssetRegistry.bin
+Saved/Config/Windows/EditorPerProjectUserSettings.ini

@@ -27,6 +27,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Movement)
 		FRotator rotation;
 
+	// Corner of bounding box, set by BoidController
+	FVector boundingBoxCorner;
+
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -46,4 +49,5 @@ protected:
 	FVector AlignBoid(TArray<FRotator> nearbyBoidRotations);
 	FVector CohereBoid(TArray<FVector> nearbyBoidLocations);
 
+	FVector KeepBoidInBox();
 };

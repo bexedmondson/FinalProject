@@ -10,9 +10,10 @@ static const float INNER_SPHERE_RADIUS = 50.0f;
 
 static const float ACTOR_SCALE = 12.0f;
 
-static const float SEPARATION_COEFFICIENT = 0.01;
-static const float ALIGNMENT_COEFFICIENT = 0.02;
+static const float SEPARATION_COEFFICIENT = 0.07;
+static const float ALIGNMENT_COEFFICIENT = 0.04;
 static const float COHESION_COEFFICIENT = 0.04;
+static const float BOUNDING_BOX_COEFFICIENT = 0.05;
 
 
 // sets default values
@@ -54,6 +55,8 @@ void ABoid::BeginPlay()
 	//initialise rotation
 	rotation = FRotator(0.0, 0.0, 0.0);
 
+	//initialise bounding box
+	boundingBoxCorner = FVector(-200, -200, -200);
 }
 
 // Called every frame
@@ -63,7 +66,7 @@ void ABoid::Tick(float DeltaTime)
 
 	newVelocity = CalculateBoidVelocity();
 
-	FVector totalVelocity = currentVelocity + newVelocity;
+	FVector totalVelocity = (currentVelocity + newVelocity).GetClampedToMaxSize(5);
 
 	rotation = totalVelocity.Rotation();
 
@@ -112,16 +115,19 @@ FVector ABoid::CalculateBoidVelocity()
 
 	if (nearbyBoidLocations.Num() == 0)
 	{
-		// there are no nearby boids, keep going straight
-		return currentVelocity;
+		// there are no nearby boids, just stay in box
+		FVector b = KeepBoidInBox();
+
+		total = b;
 	}
 	else if (immediateBoidLocations.Num() == 0)
 	{
 		// no boids to steer away from
 		FVector a = AlignBoid(nearbyBoidRotations) * ALIGNMENT_COEFFICIENT;
 		FVector c = CohereBoid(nearbyBoidLocations) * COHESION_COEFFICIENT;
+		FVector b = KeepBoidInBox();
 
-		total = a + c;
+		total = a + c + b;
 	}
 	else
 	{
@@ -129,8 +135,9 @@ FVector ABoid::CalculateBoidVelocity()
 		FVector s = SeparateBoid(immediateBoidLocations) * SEPARATION_COEFFICIENT;
 		FVector a = AlignBoid(nearbyBoidRotations) * ALIGNMENT_COEFFICIENT;
 		FVector c = CohereBoid(nearbyBoidLocations) * COHESION_COEFFICIENT;
+		FVector b = KeepBoidInBox() * BOUNDING_BOX_COEFFICIENT;
 
-		total = s + a + c;
+		total = (s + a + c + b);
 	}
 
 	return total;
@@ -206,6 +213,21 @@ FVector ABoid::CohereBoid(TArray<FVector> nearbyBoidLocations)
 	}
 
 	//average out the total and get the direction this boid should be steering in
-	return cohesionSteer / nearbyBoidLocations.Num() * COHESION_COEFFICIENT;
+	return cohesionSteer / nearbyBoidLocations.Num();
 }
 
+FVector ABoid::KeepBoidInBox()
+{
+	FVector actorLocation = GetActorLocation();
+
+	FVector boxSteer = FVector(0, 0, 0);
+
+	FBox boundingBox = FBox(boundingBoxCorner, boundingBoxCorner + 400);
+
+	if (!boundingBox.IsInside(actorLocation))
+	{
+		boxSteer = boundingBox.GetCenter() - actorLocation;
+	}
+
+	return boxSteer;
+}

@@ -25,7 +25,6 @@ public:
 	virtual void Tick(float DeltaSeconds) override;
 
 	//number of boids to be spawned
-	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement)
 	int numOfBoids;
 
 protected:
