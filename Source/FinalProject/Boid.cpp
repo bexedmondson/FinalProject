@@ -73,8 +73,6 @@ void ABoid::Tick(float DeltaTime)
 	SetActorLocationAndRotation(GetActorLocation() + totalVelocity, rotation);
 
 	currentVelocity = totalVelocity;
-
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, "cur vel " + currentVelocity.ToString());
 }
 
 void ABoid::SetVelocity(FVector velocity) 
@@ -134,19 +132,12 @@ FVector ABoid::CalculateBoidVelocity()
 	else
 	{
 		// everything is there, proceed normally
-		FVector s = SeparateBoid(immediateBoidLocations);
-		FVector a = AlignBoid(nearbyBoidRotations);
-		FVector c = CohereBoid(nearbyBoidLocations);
-		FVector b = KeepBoidInBox();
+		FVector s = SeparateBoid(immediateBoidLocations) * SEPARATION_COEFFICIENT;
+		FVector a = AlignBoid(nearbyBoidRotations) * ALIGNMENT_COEFFICIENT;
+		FVector c = CohereBoid(nearbyBoidLocations) * COHESION_COEFFICIENT;
+		FVector b = KeepBoidInBox() * BOUNDING_BOX_COEFFICIENT;
 
-		FString sep = s.ToString();
-		FString ali = s.ToString();
-		FString coh = s.ToString();
-		FString box = s.ToString();
-
-		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, "sep " + sep + " ali " + ali + " coh " + coh + " box " + box);
-
-		total = (s * SEPARATION_COEFFICIENT + a * ALIGNMENT_COEFFICIENT + c * COHESION_COEFFICIENT + b * BOUNDING_BOX_COEFFICIENT);
+		total = (s + a + c + b);
 	}
 
 	return total;
@@ -231,11 +222,7 @@ FVector ABoid::KeepBoidInBox()
 
 	FVector boxSteer = FVector(0, 0, 0);
 
-	FVector oppositeCorner; //= FVector(boundingBoxCorner)
-
-	oppositeCorner = FVector(200, 200, 200);
-
-	FBox boundingBox = FBox(boundingBoxCorner, oppositeCorner);
+	FBox boundingBox = FBox(boundingBoxCorner, boundingBoxCorner + 400);
 
 	if (!boundingBox.IsInside(actorLocation))
 	{
