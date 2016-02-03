@@ -27,7 +27,7 @@ public:
 protected:
 	UWorld* World;
 
-	ABoid* boidArray[];
-
 	void GenerateBoids();
+
+	FVector boidTarget;
 };

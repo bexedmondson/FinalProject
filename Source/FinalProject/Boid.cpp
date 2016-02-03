@@ -5,15 +5,15 @@
 
 
 // constants for this file
-static const float OUTER_SPHERE_RADIUS = 10.0f;
-static const float INNER_SPHERE_RADIUS = 50.0f;
+static const float OUTER_SPHERE_RADIUS = 10.0f; //for cohesion and alignment
+static const float INNER_SPHERE_RADIUS = 50.0f; //for separation - I don't know why this one has to be a bigger number for a smaller sphere, units make no sense
 
 static const float ACTOR_SCALE = 12.0f;
 
 static const float SEPARATION_COEFFICIENT = 0.07;
 static const float ALIGNMENT_COEFFICIENT = 0.04;
 static const float COHESION_COEFFICIENT = 0.04;
-static const float BOUNDING_BOX_COEFFICIENT = 0.05;
+static const float BOUNDING_BOX_COEFFICIENT = 0.02;
 
 static const float MAX_SPEED = 4;
 
@@ -77,11 +77,6 @@ void ABoid::Tick(float DeltaTime)
 	SetActorLocationAndRotation(GetActorLocation() + totalVelocity, rotation);
 
 	currentVelocity = totalVelocity;
-}
-
-void ABoid::SetVelocity(FVector velocity) 
-{
-	newVelocity = velocity;
 }
 
 FVector ABoid::CalculateBoidVelocity()
@@ -234,4 +229,9 @@ FVector ABoid::KeepBoidInBox()
 	}
 
 	return boxSteer;
+}
+
+void ABoid::SetTarget(FVector boidTarget)
+{
+	target = boidTarget;
 }

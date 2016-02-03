@@ -39,7 +39,9 @@ public:
 
 	FVector CalculateBoidVelocity();
 
-	void SetVelocity(FVector velocity);
+	// for goalseeking
+	FVector target;
+	void SetTarget(FVector boidTarget);
 
 
 protected:
