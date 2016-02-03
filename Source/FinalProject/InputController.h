@@ -12,8 +12,14 @@ UCLASS()
 class FINALPROJECT_API AInputController : public APlayerController
 {
 	GENERATED_BODY()
-	
-	
+
+		AInputController(const FObjectInitializer& ObjectInitializer);
+
+		virtual void BeginPlay() override;
+
+		virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent);
+
+		void OnLeftClick();
 	
 	
 };

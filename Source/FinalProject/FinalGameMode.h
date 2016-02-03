@@ -13,7 +13,7 @@ class FINALPROJECT_API AFinalGameMode : public AGameMode
 {
 	GENERATED_BODY()
 
-		AFinalGameMode(const FObjectInitializer& ObjectInitializer);
+	AFinalGameMode(const FObjectInitializer& ObjectInitializer);
 
 	virtual void StartPlay() override;
 
