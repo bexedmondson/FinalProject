@@ -22,8 +22,6 @@ void ABoidController::BeginPlay()
 
 	World = GetWorld();
 
-	
-
 	GenerateBoids();
 
 }
@@ -41,7 +39,8 @@ void ABoidController::Tick(float DeltaTime)
 }
 
 
-void ABoidController::GenerateBoids() {
+void ABoidController::GenerateBoids() 
+{
 
 	FVector boidLocation = FVector();
 	FRotator boidRotation = FRotator();
@@ -66,3 +65,7 @@ void ABoidController::GenerateBoids() {
 	}
 }
 
+void ABoidController::SetControllerTarget(FVector target)
+{
+	boidTarget = target;
+}

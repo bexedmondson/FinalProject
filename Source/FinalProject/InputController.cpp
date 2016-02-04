@@ -11,23 +11,38 @@ AInputController::AInputController(const FObjectInitializer& ObjectInitializer)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("We are using custom InputController!"));
 	}
+
+	bEnableClickEvents = true;
 }
 
 void AInputController::BeginPlay()
 {
-
+	PrimaryActorTick.bCanEverTick = true;
+	
 }
 
-void AInputController::SetupPlayerInputComponent(UInputComponent* InputComponent)
+void AInputController::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+}
+
+void AInputController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 
-	InputComponent->BindAction("LeftClick", IE_Pressed, this, &AInputController::OnLeftClick);
+	EnableInput(this);
+
+	this->InputComponent->BindAction("LeftClick", EInputEvent::IE_Pressed, this, &AInputController::OnLeftClick);
 }
 
 void AInputController::OnLeftClick()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, TEXT("click!"));
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("click!"));
+	}
+
+
 }
 
 //FHitResult TraceResult(ForceInit);

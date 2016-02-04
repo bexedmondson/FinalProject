@@ -17,7 +17,10 @@ class FINALPROJECT_API AInputController : public APlayerController
 
 		virtual void BeginPlay() override;
 
-		virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent);
+		// Called every frame
+		virtual void Tick(float DeltaSeconds) override;
+
+		virtual void SetupInputComponent();
 
 		void OnLeftClick();
 	

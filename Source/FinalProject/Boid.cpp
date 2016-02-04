@@ -233,5 +233,5 @@ FVector ABoid::KeepBoidInBox()
 
 void ABoid::SetTarget(FVector boidTarget)
 {
-	target = boidTarget;
+	boundingBoxCorner = boidTarget;
 }
