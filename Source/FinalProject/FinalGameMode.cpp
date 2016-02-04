@@ -4,11 +4,12 @@
 #include "FinalGameMode.h"
 #include "BoidController.h"
 #include "Boid.h"
+#include "InputController.h"
 
 AFinalGameMode::AFinalGameMode(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
-
+	PlayerControllerClass = AInputController::StaticClass();
 }
 
 void AFinalGameMode::StartPlay()

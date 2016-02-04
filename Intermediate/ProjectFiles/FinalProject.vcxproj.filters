@@ -52,9 +52,15 @@
     <ClInclude Include="..\..\Source\FinalProject\FinalGameMode.h">
       <Filter>Source\FinalProject</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\FinalProject\InputController.h">
+      <Filter>Source\FinalProject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\FinalProject\FinalGameMode.cpp">
+      <Filter>Source\FinalProject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\FinalProject\InputController.cpp">
       <Filter>Source\FinalProject</Filter>
     </ClCompile>
   </ItemGroup>

@@ -27,9 +27,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Movement)
 		FRotator rotation;
 
-	// Corner of bounding box, set by BoidController
-	FVector boundingBoxCorner;
-
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -37,9 +34,15 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaSeconds) override;
 
+
 	FVector CalculateBoidVelocity();
 
-	void SetVelocity(FVector velocity);
+	// for goalseeking
+	FVector target;
+	void SetTarget(FVector boidTarget);
+
+	// Corner of bounding box, set by BoidController
+	FVector boundingBoxCorner;
 
 
 protected:

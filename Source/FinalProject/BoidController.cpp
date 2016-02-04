@@ -8,6 +8,8 @@
 static const int NUMBER_OF_BOIDS = 30; //number of boids to be spawned
 static const int SPAWN_CUBE_SIZE = 200; //length of side of boid spawn cube DIVIDED BY TWO
 
+ABoid* boidArray[NUMBER_OF_BOIDS] = {};
+
 ABoidController::ABoidController(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
@@ -19,8 +21,6 @@ void ABoidController::BeginPlay()
 	Super::BeginPlay();
 
 	World = GetWorld();
-
-	boidArray[NUMBER_OF_BOIDS] = {};
 
 	GenerateBoids();
 
@@ -34,12 +34,13 @@ void ABoidController::Tick(float DeltaTime)
 
 	for (int i = 0; i < NUMBER_OF_BOIDS; i++)
 	{
-		//set goal point
+		boidArray[i]->SetTarget(boidTarget);
 	}
 }
 
 
-void ABoidController::GenerateBoids() {
+void ABoidController::GenerateBoids() 
+{
 
 	FVector boidLocation = FVector();
 	FRotator boidRotation = FRotator();
@@ -64,3 +65,7 @@ void ABoidController::GenerateBoids() {
 	}
 }
 
+void ABoidController::SetControllerTarget(FVector target)
+{
+	boidTarget = target;
+}

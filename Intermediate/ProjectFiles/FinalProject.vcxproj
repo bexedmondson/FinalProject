@@ -250,6 +250,8 @@
     <NMakeOutput>..\..\Binaries\Win64\FinalProject-Win64-Shipping.exe</NMakeOutput>
   </PropertyGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\FinalProject\InputController.cpp" />
+    <ClInclude Include="..\..\Source\FinalProject\InputController.h" />
     <None Include="..\..\FinalProject.uproject" />
     <None Include="..\..\Source\FinalProject.Target.cs" />
     <None Include="..\..\Source\FinalProjectEditor.Target.cs" />
