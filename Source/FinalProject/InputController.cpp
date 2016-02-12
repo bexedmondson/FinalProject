@@ -61,17 +61,32 @@ FVector AInputController::GetClickedPosition()
 	GetPlayerViewPoint(startTrace, unusedRotation);
 
 	//adjust trace so there's nothing blocking the ray between the camera and the pawn and calculate distance from adjusted start
-	//startTrace = startTrace + traceDirection * ((GetActorLocation() - startTrace) | traceDirection);
+	//startTrace = startTrace + traceDirection * ((boidControllerPtr->GetActorLocation() - startTrace) | traceDirection);
+	//i don't know if i need that^ so i'm leaving it commented
 
-	return FVector();
+	//calculate end point of trace
+	const float clickRange = 4096.0f;
+	const FVector endTrace = startTrace + traceDirection * clickRange;
+
+	//setup trace query
+	static FName clickTraceIdent = FName(TEXT("clickTrace"));
+	FCollisionQueryParams traceParams(clickTraceIdent, true, this);
+	traceParams.bTraceAsyncScene = true;
+
+	//perform the trace
+	GetWorld()->LineTraceSingleByChannel(landscapePosition, startTrace, endTrace, ECC_GameTraceChannel1, traceParams);
+
+	FVector clickPoint = landscapePosition.Location;
+
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, clickPoint.ToString());
+	}
+
+	return clickPoint;
 }
 
 void AInputController::SetBoidControllerPtr(ABoidController* bControllerPtr)
 {
 	boidControllerPtr = bControllerPtr;
-
-	if (GEngine)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("we have a boid controller"));
-	}
 }
