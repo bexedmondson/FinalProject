@@ -10,14 +10,15 @@ static const float INNER_SPHERE_RADIUS = 50.0f; //for separation - I don't know 
 
 static const float ACTOR_SCALE = 12.0f;
 
-static const float SEPARATION_COEFFICIENT = 0.07;
+static const float SEPARATION_COEFFICIENT = 0.09;
 static const float ALIGNMENT_COEFFICIENT = 0.04;
 static const float COHESION_COEFFICIENT = 0.04;
-static const float BOUNDING_BOX_COEFFICIENT = 0.02;
+static const float BOUNDING_BOX_COEFFICIENT = 0.005;
 
 static const float MAX_SPEED = 4;
 
 static const float BOUNDING_BOX_SIZE = 150;
+static const float DIST_ABOVE_FLOOR = 200;
 
 
 // sets default values
@@ -234,4 +235,5 @@ FVector ABoid::KeepBoidInBox()
 void ABoid::SetTarget(FVector boidTarget)
 {
 	boundingBoxCorner = boidTarget;
+	boundingBoxCorner.Z += DIST_ABOVE_FLOOR;
 }
