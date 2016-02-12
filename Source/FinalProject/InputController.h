@@ -23,6 +23,6 @@ class FINALPROJECT_API AInputController : public APlayerController
 		virtual void SetupInputComponent();
 
 		void OnLeftClick();
-	
-	
+		
+		FVector GetClickedPosition();
 };

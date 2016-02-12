@@ -7,11 +7,6 @@
 AInputController::AInputController(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
-	if (GEngine)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("We are using custom InputController!"));
-	}
-
 	bEnableClickEvents = true;
 }
 
@@ -42,17 +37,29 @@ void AInputController::OnLeftClick()
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("click!"));
 	}
 
-
+	FVector clickedPosition = GetClickedPosition();
 }
 
-//FHitResult TraceResult(ForceInit);
-//PlayerController->GetHitResultUnderCursor(ECollisionChannel::ECC_WorldDynamic, false, TraceResult);
-//FString TraceString;
-//if (TraceResult.GetActor() != nullptr)
-//{
-	//TraceString += FString::Printf(TEXT("Trace Actor %s."), *TraceResult.GetActor()->GetName());
-//}
-//if (TraceResult.GetComponent() != nullptr)
-//{
-//	TraceString += FString::Printf(TEXT("Trace Comp %s."), *TraceResult.GetComponent()->GetName());
-//}
+FVector AInputController::GetClickedPosition()
+{
+	//code adapted from linetracesingle example in unreal engine documentation
+
+	//this is what we get the location from
+	FHitResult landscapePosition;
+
+	//calculate the direction the camera is looking
+	FVector cameraLocation;
+	FRotator cameraRotation;
+	GetPlayerViewPoint(cameraLocation, cameraRotation);
+	const FVector traceDirection = cameraRotation.Vector();
+
+	//calculate the start position for the trace
+	FVector startTrace = FVector::ZeroVector;
+	FRotator unusedRotation;
+	GetPlayerViewPoint(startTrace, unusedRotation);
+
+	//adjust trace so there's nothing blocking the ray between the camera and the pawn and calculate distance from adjusted start
+	//startTrace = startTrace + traceDirection * ((GetActorLocation() - startTrace) | traceDirection);
+
+	return FVector();
+}

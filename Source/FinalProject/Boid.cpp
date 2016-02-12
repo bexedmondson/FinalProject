@@ -57,7 +57,7 @@ void ABoid::BeginPlay()
 	currentVelocity = FVector(FMath::RandRange(-0.5f, 0.5f), FMath::RandRange(-0.5f, 0.5f), FMath::RandRange(-0.5f, 0.5f));
 
 	//initialise rotation
-	rotation = FRotator(0.0, 0.0, 0.0);
+	rotation = FRotator::ZeroRotator;
 
 	//initialise bounding box
 	boundingBoxCorner = FVector(-50, -50, -50);
@@ -219,7 +219,7 @@ FVector ABoid::KeepBoidInBox()
 {
 	FVector actorLocation = GetActorLocation();
 
-	FVector boxSteer = FVector(0, 0, 0);
+	FVector boxSteer = FVector::ZeroVector;
 
 	FBox boundingBox = FBox(boundingBoxCorner, boundingBoxCorner + BOUNDING_BOX_SIZE);
 
