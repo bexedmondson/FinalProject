@@ -10,6 +10,7 @@ AInputController::AInputController(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
 	bEnableClickEvents = true;
+	bShowMouseCursor = true;
 }
 
 void AInputController::BeginPlay()
@@ -46,34 +47,10 @@ void AInputController::OnLeftClick()
 
 FVector AInputController::GetClickedPosition()
 {
-	//code adapted from linetracesingle example in unreal engine documentation
-
-	//this is what we get the location from
+	//initialise hit result
 	FHitResult landscapePosition;
 
-	//calculate the direction the camera is looking
-	FVector cameraLocation;
-	FRotator cameraRotation;
-	GetPlayerViewPoint(cameraLocation, cameraRotation);
-	const FVector traceDirection = cameraRotation.Vector();
-
-	//calculate the start position for the trace
-	FVector startTrace = FVector::ZeroVector;
-	FRotator unusedRotation;
-	GetPlayerViewPoint(startTrace, unusedRotation);
-
-	//calculate end point of trace
-	const float clickRange = 4096.0f;
-	const FVector endTrace = startTrace + traceDirection * clickRange;
-
-	//setup trace query
-	static FName clickTraceIdent = FName(TEXT("clickTrace"));
-	FCollisionQueryParams traceParams(clickTraceIdent, true, this);
-	traceParams.bTraceAsyncScene = true;
-
-	//perform the trace
-	//GetWorld()->LineTraceSingleByChannel(landscapePosition, startTrace, endTrace, ECC_GameTraceChannel1, traceParams);
-
+	//get click position
 	GetHitResultUnderCursor(ECC_Visibility, false, landscapePosition);
 
 	FVector clickPoint = landscapePosition.Location;
