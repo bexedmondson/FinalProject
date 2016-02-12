@@ -3,6 +3,7 @@
 #pragma once
 
 #include "GameFramework/PlayerController.h"
+#include "BoidController.h"
 #include "InputController.generated.h"
 
 /**
@@ -25,4 +26,7 @@ class FINALPROJECT_API AInputController : public APlayerController
 		void OnLeftClick();
 		
 		FVector GetClickedPosition();
+
+public:
+		void SetBoidControllerPtr(ABoidController* bControllerPtr);
 };

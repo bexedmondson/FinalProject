@@ -2,7 +2,9 @@
 
 #include "FinalProject.h"
 #include "InputController.h"
+#include "BoidController.h"
 
+ABoidController* boidControllerPtr;
 
 AInputController::AInputController(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
@@ -62,4 +64,14 @@ FVector AInputController::GetClickedPosition()
 	//startTrace = startTrace + traceDirection * ((GetActorLocation() - startTrace) | traceDirection);
 
 	return FVector();
+}
+
+void AInputController::SetBoidControllerPtr(ABoidController* bControllerPtr)
+{
+	boidControllerPtr = bControllerPtr;
+
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("we have a boid controller"));
+	}
 }
