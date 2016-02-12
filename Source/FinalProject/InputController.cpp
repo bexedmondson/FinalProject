@@ -40,6 +40,8 @@ void AInputController::OnLeftClick()
 	}
 
 	FVector clickedPosition = GetClickedPosition();
+
+	boidControllerPtr->SetControllerTarget(clickedPosition);
 }
 
 FVector AInputController::GetClickedPosition()
@@ -60,10 +62,6 @@ FVector AInputController::GetClickedPosition()
 	FRotator unusedRotation;
 	GetPlayerViewPoint(startTrace, unusedRotation);
 
-	//adjust trace so there's nothing blocking the ray between the camera and the pawn and calculate distance from adjusted start
-	//startTrace = startTrace + traceDirection * ((boidControllerPtr->GetActorLocation() - startTrace) | traceDirection);
-	//i don't know if i need that^ so i'm leaving it commented
-
 	//calculate end point of trace
 	const float clickRange = 4096.0f;
 	const FVector endTrace = startTrace + traceDirection * clickRange;
@@ -74,7 +72,9 @@ FVector AInputController::GetClickedPosition()
 	traceParams.bTraceAsyncScene = true;
 
 	//perform the trace
-	GetWorld()->LineTraceSingleByChannel(landscapePosition, startTrace, endTrace, ECC_GameTraceChannel1, traceParams);
+	//GetWorld()->LineTraceSingleByChannel(landscapePosition, startTrace, endTrace, ECC_GameTraceChannel1, traceParams);
+
+	GetHitResultUnderCursor(ECC_Visibility, false, landscapePosition);
 
 	FVector clickPoint = landscapePosition.Location;
 
