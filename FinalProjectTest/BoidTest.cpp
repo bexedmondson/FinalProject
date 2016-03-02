@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "Boid.h"
 #include "CppUnitTest.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
@@ -9,9 +10,9 @@ namespace FinalProjectTest
 	{
 	public:
 		
-		TEST_METHOD(TestMethod1)
+		TEST_METHOD(Test_ConstructorAddsSphereComponent)
 		{
-			// TODO: Your test code here
+			FObjectInitializer objInit = new FObjectInitializer();
 		}
 
 	};

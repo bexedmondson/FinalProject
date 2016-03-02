@@ -62,32 +62,5 @@
     <ClInclude Include="..\..\Source\FinalProject\InputController.h">
       <Filter>Source\FinalProject</Filter>
     </ClInclude>
-    <ClCompile Include="..\..\Source\FinalProject\MyFirstTest.cpp">
-      <Filter>Source\FinalProject</Filter>
-    </ClCompile>
-    <ClInclude Include="..\..\Source\FinalProject\MyFirstTest.h">
-      <Filter>Source\FinalProject</Filter>
-    </ClInclude>
-    <ClCompile Include="..\..\Source\FinalProject\TimeSpanTest.cpp">
-      <Filter>Source\FinalProject</Filter>
-    </ClCompile>
-    <ClInclude Include="..\..\Source\FinalProject\TimeSpanTest.h">
-      <Filter>Source\FinalProject</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Filter Include="Source\FinalProject\Tests">
-      <UniqueIdentifier>{5754e710-bfd0-4817-bea6-76546e36dd1c}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\Source\FinalProject\Tests\BoidTest.h">
-      <Filter>Source\FinalProject\Tests</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\Source\FinalProject\Tests\BoidTest.cpp">
-      <Filter>Source\FinalProject\Tests</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>
