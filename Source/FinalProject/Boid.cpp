@@ -18,7 +18,7 @@ static const float BOUNDING_BOX_COEFFICIENT = 0.005;
 static const float MAX_SPEED = 4;
 
 static const float BOUNDING_BOX_SIZE = 150;
-static const float DIST_ABOVE_FLOOR = 200;
+static const float DIST_ABOVE_FLOOR = 100;
 
 
 // sets default values

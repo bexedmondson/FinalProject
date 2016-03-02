@@ -26,7 +26,6 @@ void ABoidController::BeginPlay()
 
 }
 
-
 // Called every frame
 void ABoidController::Tick(float DeltaTime)
 {
