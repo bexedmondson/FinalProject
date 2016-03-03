@@ -5,6 +5,8 @@
 #include "GameFramework/Actor.h"
 #include "Boid.generated.h"
 
+#define FloorChannel ECC_Pawn
+
 UCLASS()
 class FINALPROJECT_API ABoid : public AActor
 {
@@ -53,4 +55,15 @@ protected:
 	FVector CohereBoid(TArray<FVector> nearbyBoidLocations);
 
 	FVector KeepBoidInBox();
+	FVector KeepBoidAboveFloor();
+
+	bool Trace(
+		UWorld* World,
+		AActor* ActorToIgnore,
+		const FVector& Start,
+		const FVector& End,
+		FHitResult& HitOut,
+		ECollisionChannel CollisionChannel = FloorChannel,
+		bool ReturnPhysMat = false
+		);
 };

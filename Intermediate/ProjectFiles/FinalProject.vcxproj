@@ -251,9 +251,7 @@
   </PropertyGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\FinalProject\InputController.cpp" />
-    <ClCompile Include="..\..\Source\FinalProject\Trace.cpp" />
     <ClInclude Include="..\..\Source\FinalProject\InputController.h" />
-    <ClInclude Include="..\..\Source\FinalProject\Trace.h" />
     <None Include="..\..\FinalProject.uproject" />
     <None Include="..\..\Source\FinalProject.Target.cs" />
     <None Include="..\..\Source\FinalProjectEditor.Target.cs" />
