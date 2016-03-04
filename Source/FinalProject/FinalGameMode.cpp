@@ -5,6 +5,7 @@
 #include "BoidController.h"
 #include "Boid.h"
 #include "InputController.h"
+#include "GoalController.h"
 
 AFinalGameMode::AFinalGameMode(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
@@ -19,6 +20,7 @@ void AFinalGameMode::StartPlay()
 	StartMatch();
 
 	ABoidController* boidControllerPtr = GetWorld()->SpawnActor<ABoidController>(ABoidController::StaticClass());
+	AGoalController* goalControllerPtr = GetWorld()->SpawnActor<AGoalController>(AGoalController::StaticClass());
 
 	inputControllerPtr->SetBoidControllerPtr(boidControllerPtr);
 }

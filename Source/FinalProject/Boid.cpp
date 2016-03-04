@@ -260,13 +260,6 @@ FVector ABoid::KeepBoidAboveFloor()
 		{
 			upSteer = FVector::UpVector * MIN_DIST_ABOVE_FLOOR;
 		}
-
-		//Print out the name of the traced actor
-		if (floorPointBelowBoid.GetActor() && GEngine)
-		{
-			//Print out distance from start of trace to impact point
-			GEngine->AddOnScreenDebugMessage(-1, 0.5f, FColor::Yellow, "Trace Distance: " + upSteer.ToString());
-		}
 	}
 
 	return upSteer;
