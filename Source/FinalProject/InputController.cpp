@@ -2,17 +2,15 @@
 
 #include "FinalProject.h"
 #include "InputController.h"
+#include "BoidController.h"
 
+ABoidController* boidControllerPtr;
 
 AInputController::AInputController(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
-	if (GEngine)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("We are using custom InputController!"));
-	}
-
 	bEnableClickEvents = true;
+	bShowMouseCursor = true;
 }
 
 void AInputController::BeginPlay()
@@ -37,22 +35,25 @@ void AInputController::SetupInputComponent()
 
 void AInputController::OnLeftClick()
 {
-	if (GEngine)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("click!"));
-	}
+	FVector clickedPosition = GetClickedPosition();
 
-
+	boidControllerPtr->SetControllerTarget(clickedPosition);
 }
 
-//FHitResult TraceResult(ForceInit);
-//PlayerController->GetHitResultUnderCursor(ECollisionChannel::ECC_WorldDynamic, false, TraceResult);
-//FString TraceString;
-//if (TraceResult.GetActor() != nullptr)
-//{
-	//TraceString += FString::Printf(TEXT("Trace Actor %s."), *TraceResult.GetActor()->GetName());
-//}
-//if (TraceResult.GetComponent() != nullptr)
-//{
-//	TraceString += FString::Printf(TEXT("Trace Comp %s."), *TraceResult.GetComponent()->GetName());
-//}
+FVector AInputController::GetClickedPosition()
+{
+	//initialise hit result
+	FHitResult landscapePosition;
+
+	//get click position
+	GetHitResultUnderCursor(ECC_Visibility, false, landscapePosition);
+
+	FVector clickPoint = landscapePosition.Location;
+
+	return clickPoint;
+}
+
+void AInputController::SetBoidControllerPtr(ABoidController* bControllerPtr)
+{
+	boidControllerPtr = bControllerPtr;
+}
