@@ -34,7 +34,7 @@ void AGoalController::Tick( float DeltaTime )
 
 	if (GEngine)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::FromInt(goalArray.Num()));
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::FromInt(goalArray.Num()));
 	}
 }
 

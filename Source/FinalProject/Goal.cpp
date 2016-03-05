@@ -3,6 +3,7 @@
 #include "FinalProject.h"
 #include "Goal.h"
 
+static const float ACTOR_SCALE = 20.0f;
 
 // Sets default values
 AGoal::AGoal()
@@ -19,12 +20,22 @@ AGoal::AGoal()
 		GoalMesh->SetStaticMesh(CubeMeshAsset.Object);
 		RootComponent = GoalMesh;
 		SetActorEnableCollision(true);
+
+		static ConstructorHelpers::FObjectFinder<UMaterial> Material(TEXT("Material'/Game/Materials/GoalMaterialNeutral.GoalMaterialNeutral'"));
+		if (Material.Object != NULL)
+		{
+			UMaterial* GoalMaterial = (UMaterial*)Material.Object;
+			GoalMesh->SetMaterial(0, GoalMaterial);
+		}
 	}
+
+	// scale to be more easily visible
+	SetActorScale3D(FVector(ACTOR_SCALE, ACTOR_SCALE, ACTOR_SCALE));
 
 	// attach sphere for detecting nearby boids
 	USphereComponent* SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
 	SphereComponent->AttachTo(RootComponent);
-	SphereComponent->InitSphereRadius(40.0);
+	SphereComponent->InitSphereRadius(20.0);
 	SphereComponent->SetCollisionProfileName("GoalCollider");
 }
 
