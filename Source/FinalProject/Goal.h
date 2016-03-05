@@ -5,6 +5,8 @@
 #include "GameFramework/Actor.h"
 #include "Goal.generated.h"
 
+enum class Team { Player, Neutral, Enemy };
+
 UCLASS()
 class FINALPROJECT_API AGoal : public AActor
 {
@@ -23,5 +25,8 @@ public:
 protected:
 	UStaticMeshComponent* GoalMesh;
 
-	
+	void CheckForActorsInSphere();
+
+	void SetTeamColour();
+	Team GetTeam();
 };
