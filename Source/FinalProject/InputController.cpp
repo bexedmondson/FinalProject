@@ -35,11 +35,6 @@ void AInputController::SetupInputComponent()
 
 void AInputController::OnLeftClick()
 {
-	if (GEngine)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("click!"));
-	}
-
 	FVector clickedPosition = GetClickedPosition();
 
 	boidControllerPtr->SetControllerTarget(clickedPosition);
@@ -54,11 +49,6 @@ FVector AInputController::GetClickedPosition()
 	GetHitResultUnderCursor(ECC_Visibility, false, landscapePosition);
 
 	FVector clickPoint = landscapePosition.Location;
-
-	if (GEngine)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, clickPoint.ToString());
-	}
 
 	return clickPoint;
 }
