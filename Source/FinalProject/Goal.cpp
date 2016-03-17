@@ -9,10 +9,6 @@ static const FColor PLAYER_COLOUR = FColor::Green;
 static const FColor NEUTRAL_COLOUR = FColor::Yellow;
 static const FColor ENEMY_COLOUR = FColor::Red;
 
-Team team = Team::Neutral;
-
-UMaterialInstance* goalMaterial;
-
 // Sets default values
 AGoal::AGoal()
 {
@@ -20,7 +16,7 @@ AGoal::AGoal()
 	PrimaryActorTick.bCanEverTick = true;
 
 	// static mesh for visualisation
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeMeshAsset(TEXT("StaticMesh'/Game/Meshes/goal0_1.goal0_1'"));
+	/*static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeMeshAsset(TEXT("StaticMesh'/Game/Meshes/goal0_1.goal0_1'"));
 	if (CubeMeshAsset.Succeeded())
 	{
 		PrimaryActorTick.bCanEverTick = true;
@@ -28,14 +24,7 @@ AGoal::AGoal()
 		GoalMesh->SetStaticMesh(CubeMeshAsset.Object);
 		RootComponent = GoalMesh;
 		SetActorEnableCollision(true);
-
-		static ConstructorHelpers::FObjectFinder<UMaterialInstance> MaterialInstance(TEXT("MaterialInstanceConstant'/Game/Materials/GoalMaterialInst.GoalMaterialInst'"));
-		if (MaterialInstance.Object != NULL)
-		{
-			goalMaterial = (UMaterialInstance*)MaterialInstance.Object;
-			GoalMesh->SetMaterial(0, goalMaterial);
-		}
-	}
+	}*/
 
 	// scale to be more easily visible
 	SetActorScale3D(FVector(ACTOR_SCALE, ACTOR_SCALE, ACTOR_SCALE));
@@ -45,6 +34,8 @@ AGoal::AGoal()
 	SphereComponent->AttachTo(RootComponent);
 	SphereComponent->InitSphereRadius(20.0);
 	SphereComponent->SetCollisionProfileName("GoalCollider");
+
+	team = ETeam::NEUTRAL;
 }
 
 // Called when the game starts or when spawned
@@ -95,46 +86,34 @@ void AGoal::CheckForActorsInSphere()
 
 	if (numOfBoidsInSphere > 10) //&& enemyNum < 3
 	{
-		team = Team::Player;
-		SetTeamColour();
+		team = ETeam::PLAYER;
 	}
 	//else if numOfBoids < 10 && enemyNum > 3
-	//team = Team::Enemy
-	//SetTeamColour();
+	//team = ETeam::ENEMY
 	//else if numOfBoids > 10 && enemyNum > 3 
 	//both teams are fighting over the same one, set to neutral
-	//team = Team::Neutral
-	//SetTeamColour();
+	//team = ETeam::NEUTRAL
 }
 
-void AGoal::SetTeamColour()
+FColor AGoal::GetTeamColour()
 {
-	FString teamString;
-
-	if (team == Team::Player)
+	if (team == ETeam::PLAYER)
 	{
-		goalMaterial->SetVectorParameterValue("GoalColor", PLAYER_COLOUR);
-		teamString = "player";
+		return PLAYER_COLOUR;
 	}
-	else if (team == Team::Neutral)
+	else if (team == ETeam::NEUTRAL)
 	{
-		goalMaterial->SetVectorParameterValue("GoalColor", NEUTRAL_COLOUR);
-		teamString = "neutral";
+		return NEUTRAL_COLOUR;
 	}
-	else if (team == Team::Enemy)
+	else if (team == ETeam::ENEMY)
 	{
-		goalMaterial->SetVectorParameterValue("GoalColor", ENEMY_COLOUR);
-		teamString = "enemy";
+		return ENEMY_COLOUR;
 	}
 
-
-	if (GEngine)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, teamString);
-	}
+	return FColor::White;
 }
 
-Team AGoal::GetTeam()
+ETeam AGoal::GetTeam()
 {
 	return team;
 }
