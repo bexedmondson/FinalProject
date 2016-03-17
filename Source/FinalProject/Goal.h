@@ -5,10 +5,21 @@
 #include "GameFramework/Actor.h"
 #include "Goal.generated.h"
 
+UENUM(BlueprintType)
+enum class ETeam : uint8
+{ 
+	PLAYER		UMETA(DisplayName = "Player"),
+	NEUTRAL		UMETA(DisplayName = "Neutral"),
+	ENEMY		UMETA(DisplayName = "Enemy")
+};
+
 UCLASS()
 class FINALPROJECT_API AGoal : public AActor
 {
 	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Enum)
+	ETeam team;
 	
 public:	
 	// Sets default values for this actor's properties
@@ -23,5 +34,8 @@ public:
 protected:
 	UStaticMeshComponent* GoalMesh;
 
-	
+	void CheckForActorsInSphere();
+
+	FColor GetTeamColour();
+	ETeam GetTeam();
 };

@@ -43,7 +43,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{B6620473-71A9-4B34-A7B0-61CFEFBDA990}</ProjectGuid>
+    <ProjectGuid>{D72EBDC8-323A-4FDE-B6C8-0103E96375CA}</ProjectGuid>
     <Keyword>MakeFileProj</Keyword>
     <RootNamespace>FinalProject</RootNamespace>
   </PropertyGroup>
@@ -267,8 +267,8 @@
     <ClCompile Include="..\..\Source\FinalProject\FinalProject.cpp" />
     <ClInclude Include="..\..\Source\FinalProject\FinalProject.h" />
     <ClCompile Include="..\..\Source\FinalProject\Goal.cpp" />
-    <ClCompile Include="..\..\Source\FinalProject\GoalController.cpp" />
     <ClInclude Include="..\..\Source\FinalProject\Goal.h" />
+    <ClCompile Include="..\..\Source\FinalProject\GoalController.cpp" />
     <ClInclude Include="..\..\Source\FinalProject\GoalController.h" />
     <ClCompile Include="..\..\Source\FinalProject\InputController.cpp" />
     <ClInclude Include="..\..\Source\FinalProject\InputController.h" />
