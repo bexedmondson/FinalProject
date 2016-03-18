@@ -5,6 +5,8 @@
 #include "GameFramework/Actor.h"
 #include "Agent.generated.h"
 
+#define FloorChannel ECC_Pawn
+
 UCLASS()
 class FINALPROJECT_API AAgent : public AActor
 {
@@ -20,6 +22,28 @@ public:
 	// Called every frame
 	virtual void Tick( float DeltaSeconds ) override;
 
+	void SetGlobalBest(FVector gBest);
+	FVector GetAgentBest();
+
+	FVector agentBestPosition;
+	FVector globalBestPosition;
+
+	FVector currentVelocity;
+	FVector newVelocity;
+
+protected:
+	UStaticMeshComponent* AgentMesh;
+
+	void CheckAgentBest();
+	FVector GetAgentVelocity();
 	
-	
+	bool Trace(
+		UWorld* World,
+		AActor* ActorToIgnore,
+		const FVector& Start,
+		const FVector& End,
+		FHitResult& HitOut,
+		ECollisionChannel CollisionChannel = FloorChannel,
+		bool ReturnPhysMat = false
+		);
 };

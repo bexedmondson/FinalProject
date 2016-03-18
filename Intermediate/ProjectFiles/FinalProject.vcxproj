@@ -44,7 +44,7 @@
 		</ProjectConfiguration>
 	</ItemGroup>
 	<PropertyGroup Label="Globals">
-		<ProjectGuid>{8E818495-54DF-408A-9A19-9931D7C6C03C}</ProjectGuid>
+		<ProjectGuid>{5E53C405-07BC-40BB-9C0D-07B25B393AD8}</ProjectGuid>
 		<Keyword>MakeFileProj</Keyword>
 		<RootNamespace>FinalProject</RootNamespace>
 	</PropertyGroup>

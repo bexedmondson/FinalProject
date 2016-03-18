@@ -281,7 +281,8 @@ bool ABoid::Trace(
 	FHitResult& HitOut,
 	ECollisionChannel CollisionChannel,
 	bool ReturnPhysMat
-	) {
+	) 
+{
 	if (!World)
 	{
 		return false;
