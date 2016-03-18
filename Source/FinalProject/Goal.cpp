@@ -16,7 +16,7 @@ AGoal::AGoal()
 	PrimaryActorTick.bCanEverTick = true;
 
 	// static mesh for visualisation
-	/*static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeMeshAsset(TEXT("StaticMesh'/Game/Meshes/goal0_1.goal0_1'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeMeshAsset(TEXT("StaticMesh'/Game/Meshes/goal0_1.goal0_1'"));
 	if (CubeMeshAsset.Succeeded())
 	{
 		PrimaryActorTick.bCanEverTick = true;
@@ -24,7 +24,7 @@ AGoal::AGoal()
 		GoalMesh->SetStaticMesh(CubeMeshAsset.Object);
 		RootComponent = GoalMesh;
 		SetActorEnableCollision(true);
-	}*/
+	}
 
 	// scale to be more easily visible
 	SetActorScale3D(FVector(ACTOR_SCALE, ACTOR_SCALE, ACTOR_SCALE));
@@ -35,7 +35,7 @@ AGoal::AGoal()
 	SphereComponent->InitSphereRadius(20.0);
 	SphereComponent->SetCollisionProfileName("GoalCollider");
 
-	team = ETeam::NEUTRAL;
+	team = Team::NEUTRAL;
 }
 
 // Called when the game starts or when spawned
@@ -86,26 +86,26 @@ void AGoal::CheckForActorsInSphere()
 
 	if (numOfBoidsInSphere > 10) //&& enemyNum < 3
 	{
-		team = ETeam::PLAYER;
+		team = Team::PLAYER;
 	}
 	//else if numOfBoids < 10 && enemyNum > 3
-	//team = ETeam::ENEMY
+	//team = Team::ENEMY
 	//else if numOfBoids > 10 && enemyNum > 3 
 	//both teams are fighting over the same one, set to neutral
-	//team = ETeam::NEUTRAL
+	//team = Team::NEUTRAL
 }
 
 FColor AGoal::GetTeamColour()
 {
-	if (team == ETeam::PLAYER)
+	if (team == Team::PLAYER)
 	{
 		return PLAYER_COLOUR;
 	}
-	else if (team == ETeam::NEUTRAL)
+	else if (team == Team::NEUTRAL)
 	{
 		return NEUTRAL_COLOUR;
 	}
-	else if (team == ETeam::ENEMY)
+	else if (team == Team::ENEMY)
 	{
 		return ENEMY_COLOUR;
 	}
@@ -113,7 +113,7 @@ FColor AGoal::GetTeamColour()
 	return FColor::White;
 }
 
-ETeam AGoal::GetTeam()
+Team AGoal::GetTeam()
 {
 	return team;
 }
