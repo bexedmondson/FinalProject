@@ -29,13 +29,14 @@ public:
 	FVector globalBestPosition;
 
 	FVector currentVelocity;
-	FVector newVelocity;
 
 protected:
 	UStaticMeshComponent* AgentMesh;
 
 	void CheckAgentBest();
-	FVector GetAgentVelocity();
+	FVector AlignToLandscape(FVector location);
+
+	FVector CalculateAgentVelocity();
 	
 	bool Trace(
 		UWorld* World,

@@ -21,10 +21,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Movement)
 		FVector currentVelocity;
 
-	/** Boid new movement component */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Movement)
-		FVector newVelocity;
-
 	/** Boid rotation component */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Movement)
 		FRotator rotation;

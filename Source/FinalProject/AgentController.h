@@ -27,7 +27,6 @@ protected:
 	UWorld* World;
 
 	void GenerateAgents();
-	int CalculateZValue(int x, int y);
 
 	void FindGlobalBest();
 	FVector globalBest;

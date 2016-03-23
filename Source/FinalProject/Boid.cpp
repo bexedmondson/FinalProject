@@ -70,9 +70,7 @@ void ABoid::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	newVelocity = CalculateBoidVelocity();
-
-	FVector totalVelocity = (currentVelocity + newVelocity).GetClampedToMaxSize(MAX_SPEED);
+	FVector totalVelocity = (currentVelocity + CalculateBoidVelocity()).GetClampedToMaxSize(MAX_SPEED);
 
 	rotation = totalVelocity.Rotation();
 

@@ -3,8 +3,10 @@
 #include "FinalProject.h"
 #include "Agent.h"
 
-static const float ACTOR_SCALE = 30.0f;
+static const float ACTOR_SCALE = 100.0f;
 
+static const float PBEST_COEFFICIENT = 0.01;
+static const float GBEST_COEFFICIENT = 0.007;
 
 // Sets default values
 AAgent::AAgent()
@@ -29,10 +31,14 @@ void AAgent::BeginPlay()
 {
 	Super::BeginPlay();
 
+	SetActorLocation(AlignToLandscape(GetActorLocation()));
+
 	// scale to be more easily visible
 	SetActorScale3D(FVector(ACTOR_SCALE, ACTOR_SCALE, ACTOR_SCALE));
 
 	agentBestPosition = GetActorLocation();
+
+	currentVelocity = FVector(FMath::RandRange(-0.5f, 0.5f), FMath::RandRange(-0.5f, 0.5f), FMath::RandRange(-0.5f, 0.5f));
 }
 
 // Called every frame
@@ -40,9 +46,11 @@ void AAgent::Tick( float DeltaTime )
 {
 	Super::Tick( DeltaTime );
 
-	CheckAgentBest();
+	FVector totalVelocity = currentVelocity + CalculateAgentVelocity();
 
-	newVelocity = GetAgentVelocity();
+	SetActorLocation(AlignToLandscape(GetActorLocation() + totalVelocity));
+
+	CheckAgentBest();
 }
 
 void AAgent::CheckAgentBest()
@@ -55,9 +63,29 @@ void AAgent::CheckAgentBest()
 	}
 }
 
-FVector AAgent::GetAgentVelocity()
+FVector AAgent::AlignToLandscape(FVector location)
 {
-	return FVector::ZeroVector;
+	FVector belowFloorLocation = location;
+	belowFloorLocation.Z -= 10000;
+
+	FHitResult hitResult(EForceInit::ForceInit);
+
+	bool traceSuccess = Trace(GetWorld(), NULL, location, belowFloorLocation, hitResult);
+
+	if (traceSuccess)
+	{
+		location.Z = hitResult.Location.Z + 50;
+		SetActorRotation(hitResult.ImpactNormal);
+	}
+	
+	return location;
+}
+
+FVector AAgent::CalculateAgentVelocity()
+{
+	FVector pbestComponent = PBEST_COEFFICIENT * FMath::RandRange(0, 1) * (agentBestPosition - GetActorLocation());
+	FVector gbestComponent = GBEST_COEFFICIENT * FMath::RandRange(0, 1) * (globalBestPosition - GetActorLocation());
+	return pbestComponent + gbestComponent;
 }
 
 void AAgent::SetGlobalBest(FVector gBest)

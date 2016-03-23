@@ -6,7 +6,7 @@
 
 // constants for this file
 static const int NUMBER_OF_AGENTS = 30; //number of agents to be spawned
-static const int SPAWN_SQUARE_SIZE = 200; //length of side of agent spawn square DIVIDED BY TWO
+static const int SPAWN_SQUARE_SIZE = 2000; //length of side of agent spawn square DIVIDED BY TWO
 
 AAgent* agentArray[NUMBER_OF_AGENTS] = {};
 
@@ -52,11 +52,10 @@ void AAgentController::GenerateAgents()
 		//generate random numbers for location
 		int randNumX = rand() % (SPAWN_SQUARE_SIZE - -SPAWN_SQUARE_SIZE + 1) + -SPAWN_SQUARE_SIZE;
 		int randNumY = rand() % (SPAWN_SQUARE_SIZE - -SPAWN_SQUARE_SIZE + 1) + -SPAWN_SQUARE_SIZE;
-		int calculatedZ = CalculateZValue(randNumX, randNumY);
 
 		//randomise spawn point and rotation
-		agentLocation = FVector(randNumX, randNumY, calculatedZ);
-		agentRotation = FRotator(FMath::RandRange(-90, 90), FMath::RandRange(-180, 180), FMath::RandRange(-180, 180));
+		agentLocation = FVector(randNumX, randNumY, 0);
+		agentRotation = FRotator::ZeroRotator;
 
 		//spawn boid
 		AAgent* agent = GetWorld()->SpawnActor<AAgent>(AAgent::StaticClass(), agentLocation, agentRotation);
@@ -64,11 +63,6 @@ void AAgentController::GenerateAgents()
 		//add boid to array for boid algorithm calculations
 		agentArray[i] = agent;
 	}
-}
-
-int AAgentController::CalculateZValue(int x, int y) 
-{
-	return 0;
 }
 
 void AAgentController::FindGlobalBest()
@@ -81,5 +75,7 @@ void AAgentController::FindGlobalBest()
 			globalBest = agentBest;
 		}
 	}
+
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, globalBest.ToString());
 }
 
