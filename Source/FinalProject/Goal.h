@@ -5,12 +5,11 @@
 #include "GameFramework/Actor.h"
 #include "Goal.generated.h"
 
-//UENUM(BlueprintType)
 enum class Team
 { 
-	PLAYER,		//UMETA(DisplayName = "Player"),
-	NEUTRAL,		//UMETA(DisplayName = "Neutral"),
-	ENEMY		//UMETA(DisplayName = "Enemy")
+	PLAYER,		
+	NEUTRAL,	
+	ENEMY		
 };
 
 UCLASS()

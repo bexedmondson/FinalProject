@@ -3,6 +3,7 @@
 #include "FinalProject.h"
 #include "Goal.h"
 #include "Boid.h"
+#include "Agent.h"
 
 static const float ACTOR_SCALE = 20.0f;
 static const FColor PLAYER_COLOUR = FColor::Green;
@@ -51,6 +52,18 @@ void AGoal::Tick( float DeltaTime )
 	Super::Tick( DeltaTime );
 
 	CheckForActorsInSphere();
+
+	if (team == Team::ENEMY) {
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, "enemy");
+	}
+	else if (team == Team::NEUTRAL) 
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, "neutral");
+	}
+	else if (team == Team::PLAYER)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, "player");
+	}
 }
 
 void AGoal::CheckForActorsInSphere()
@@ -62,10 +75,10 @@ void AGoal::CheckForActorsInSphere()
 	// initialise count to hold number of boids
 	int numOfBoidsInSphere = 0;
 
-	//initialise list of AI actors so they can be set to redistribute
-	//TO BE DONE IN LATER ISSUE
-	
-	TArray<FVector> nearbyBoidLocations;
+	//initialise count to hold number of agents
+	//also initialise list of AI actors so they can be set to redistribute
+	int numOfAgentsInSphere = 0;
+	TArray<AAgent*> nearbyAgents;
 
 	// iterate over components to find only the boids
 	for (int i = 0; i < nearbyComponents.Num(); i++)
@@ -78,21 +91,26 @@ void AGoal::CheckForActorsInSphere()
 		{
 			numOfBoidsInSphere++;
 		}
-		else if (false)
+		else if (colliderOwner->IsA(AAgent::StaticClass()))
 		{
-			//this is where the check for AI will go
+			numOfAgentsInSphere++;
+			nearbyAgents.AddUnique((AAgent*)colliderOwner); //have to cast here or doesn't build
 		}
 	}
 
-	if (numOfBoidsInSphere > 10) //&& enemyNum < 3
+	if (numOfBoidsInSphere > 10 && numOfAgentsInSphere < 5)
 	{
 		team = Team::PLAYER;
 	}
-	//else if numOfBoids < 10 && enemyNum > 3
-	//team = Team::ENEMY
-	//else if numOfBoids > 10 && enemyNum > 3 
-	//both teams are fighting over the same one, set to neutral
-	//team = Team::NEUTRAL
+	else if (numOfBoidsInSphere < 10 && numOfAgentsInSphere > 5)
+	{
+		team = Team::ENEMY;
+	}
+	else if (numOfBoidsInSphere > 10 && numOfAgentsInSphere > 3)
+	{
+		//both teams are fighting over the same one, set to neutral
+		team = Team::NEUTRAL;
+	}
 }
 
 FColor AGoal::GetTeamColour()

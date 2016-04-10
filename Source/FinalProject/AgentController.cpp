@@ -75,7 +75,5 @@ void AAgentController::FindGlobalBest()
 			globalBest = agentBest;
 		}
 	}
-
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, globalBest.ToString());
 }
 
