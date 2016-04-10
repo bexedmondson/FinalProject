@@ -4,6 +4,7 @@
 #include "FinalGameMode.h"
 #include "BoidController.h"
 #include "Boid.h"
+#include "AgentController.h"
 #include "InputController.h"
 #include "GoalController.h"
 
@@ -20,6 +21,7 @@ void AFinalGameMode::StartPlay()
 	StartMatch();
 
 	ABoidController* boidControllerPtr = GetWorld()->SpawnActor<ABoidController>(ABoidController::StaticClass());
+	AAgentController* agentControllerPtr = GetWorld()->SpawnActor<AAgentController>(AAgentController::StaticClass());
 	AGoalController* goalControllerPtr = GetWorld()->SpawnActor<AGoalController>(AGoalController::StaticClass());
 
 	inputControllerPtr->SetBoidControllerPtr(boidControllerPtr);

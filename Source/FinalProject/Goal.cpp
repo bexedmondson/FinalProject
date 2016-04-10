@@ -2,8 +2,12 @@
 
 #include "FinalProject.h"
 #include "Goal.h"
+#include "Boid.h"
 
 static const float ACTOR_SCALE = 20.0f;
+static const FColor PLAYER_COLOUR = FColor::Green;
+static const FColor NEUTRAL_COLOUR = FColor::Yellow;
+static const FColor ENEMY_COLOUR = FColor::Red;
 
 // Sets default values
 AGoal::AGoal()
@@ -20,13 +24,6 @@ AGoal::AGoal()
 		GoalMesh->SetStaticMesh(CubeMeshAsset.Object);
 		RootComponent = GoalMesh;
 		SetActorEnableCollision(true);
-
-		static ConstructorHelpers::FObjectFinder<UMaterial> Material(TEXT("Material'/Game/Materials/GoalMaterialNeutral.GoalMaterialNeutral'"));
-		if (Material.Object != NULL)
-		{
-			UMaterial* GoalMaterial = (UMaterial*)Material.Object;
-			GoalMesh->SetMaterial(0, GoalMaterial);
-		}
 	}
 
 	// scale to be more easily visible
@@ -37,6 +34,8 @@ AGoal::AGoal()
 	SphereComponent->AttachTo(RootComponent);
 	SphereComponent->InitSphereRadius(20.0);
 	SphereComponent->SetCollisionProfileName("GoalCollider");
+
+	team = Team::NEUTRAL;
 }
 
 // Called when the game starts or when spawned
@@ -51,5 +50,70 @@ void AGoal::Tick( float DeltaTime )
 {
 	Super::Tick( DeltaTime );
 
+	CheckForActorsInSphere();
 }
 
+void AGoal::CheckForActorsInSphere()
+{
+	// get nearby objects
+	TArray<UPrimitiveComponent*> nearbyComponents;
+	GetOverlappingComponents(nearbyComponents);
+
+	// initialise count to hold number of boids
+	int numOfBoidsInSphere = 0;
+
+	//initialise list of AI actors so they can be set to redistribute
+	//TO BE DONE IN LATER ISSUE
+	
+	TArray<FVector> nearbyBoidLocations;
+
+	// iterate over components to find only the boids
+	for (int i = 0; i < nearbyComponents.Num(); i++)
+	{
+		UPrimitiveComponent* collidingComponent = nearbyComponents[i];
+		AActor* colliderOwner = collidingComponent->GetOwner();
+
+		// if it's a boid, increase the count
+		if (colliderOwner->IsA(ABoid::StaticClass()))
+		{
+			numOfBoidsInSphere++;
+		}
+		else if (false)
+		{
+			//this is where the check for AI will go
+		}
+	}
+
+	if (numOfBoidsInSphere > 10) //&& enemyNum < 3
+	{
+		team = Team::PLAYER;
+	}
+	//else if numOfBoids < 10 && enemyNum > 3
+	//team = Team::ENEMY
+	//else if numOfBoids > 10 && enemyNum > 3 
+	//both teams are fighting over the same one, set to neutral
+	//team = Team::NEUTRAL
+}
+
+FColor AGoal::GetTeamColour()
+{
+	if (team == Team::PLAYER)
+	{
+		return PLAYER_COLOUR;
+	}
+	else if (team == Team::NEUTRAL)
+	{
+		return NEUTRAL_COLOUR;
+	}
+	else if (team == Team::ENEMY)
+	{
+		return ENEMY_COLOUR;
+	}
+
+	return FColor::White;
+}
+
+Team AGoal::GetTeam()
+{
+	return team;
+}
