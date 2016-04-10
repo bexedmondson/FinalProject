@@ -27,6 +27,7 @@ protected:
 	UWorld* World;
 
 	void GenerateAgents();
+	AAgent* SpawnNewAgent();
 
 	void FindGlobalBest();
 	FVector globalBest;
