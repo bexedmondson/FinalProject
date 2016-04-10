@@ -105,6 +105,10 @@ void AGoal::CheckForActorsInSphere()
 	else if (numOfBoidsInSphere < 10 && numOfAgentsInSphere > 5)
 	{
 		team = Team::ENEMY;
+		for (AAgent* agent : nearbyAgents)
+		{
+			agent->SetToBeRespawned();
+		}
 	}
 	else if (numOfBoidsInSphere > 10 && numOfAgentsInSphere > 3)
 	{

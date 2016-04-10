@@ -31,6 +31,8 @@ void AAgent::BeginPlay()
 {
 	Super::BeginPlay();
 
+	toBeRespawned = false;
+
 	SetActorLocation(AlignToLandscape(GetActorLocation()));
 
 	// scale to be more easily visible
@@ -96,6 +98,17 @@ void AAgent::SetGlobalBest(FVector gBest)
 FVector AAgent::GetAgentBest()
 {
 	return agentBestPosition;
+}
+
+void AAgent::SetToBeRespawned()
+{
+	//never any need to set it to false
+	toBeRespawned = true;
+}
+
+bool AAgent::ShouldAgentBeRepawned()
+{
+	return toBeRespawned;
 }
 
 //this utility code taken from https://wiki.unrealengine.com/Trace_Functions

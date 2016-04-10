@@ -36,6 +36,7 @@ void AAgentController::Tick(float DeltaTime)
 
 	for (int i = 0; i < NUMBER_OF_AGENTS; i++)
 	{
+		//update PSO variable
 		agentArray[i]->SetGlobalBest(globalBest);
 	}
 }
