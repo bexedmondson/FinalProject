@@ -36,33 +36,43 @@ void AAgentController::Tick(float DeltaTime)
 
 	for (int i = 0; i < NUMBER_OF_AGENTS; i++)
 	{
+		//update PSO variable
 		agentArray[i]->SetGlobalBest(globalBest);
+
+		//respawn agents as appropriate
+		if (agentArray[i]->ShouldAgentBeRepawned())
+		{
+			agentArray[i]->Destroy();
+			agentArray[i] = SpawnNewAgent();
+		}
 	}
 }
 
 
 void AAgentController::GenerateAgents()
 {
+	for (int i = 0; i < NUMBER_OF_AGENTS; i++)
+	{
+		//add boid to array for boid algorithm calculations
+		agentArray[i] = SpawnNewAgent();
+	}
+}
 
+AAgent* AAgentController::SpawnNewAgent()
+{
 	FVector agentLocation = FVector();
 	FRotator agentRotation = FRotator();
 
-	for (int i = 0; i < NUMBER_OF_AGENTS; i++)
-	{
-		//generate random numbers for location
-		int randNumX = rand() % (SPAWN_SQUARE_SIZE - -SPAWN_SQUARE_SIZE + 1) + -SPAWN_SQUARE_SIZE;
-		int randNumY = rand() % (SPAWN_SQUARE_SIZE - -SPAWN_SQUARE_SIZE + 1) + -SPAWN_SQUARE_SIZE;
+	//generate random numbers for location
+	int randNumX = rand() % (SPAWN_SQUARE_SIZE - -SPAWN_SQUARE_SIZE + 1) + -SPAWN_SQUARE_SIZE;
+	int randNumY = rand() % (SPAWN_SQUARE_SIZE - -SPAWN_SQUARE_SIZE + 1) + -SPAWN_SQUARE_SIZE;
 
-		//randomise spawn point and rotation
-		agentLocation = FVector(randNumX, randNumY, 0);
-		agentRotation = FRotator::ZeroRotator;
+	//randomise spawn point and rotation
+	agentLocation = FVector(randNumX, randNumY, 0);
+	agentRotation = FRotator::ZeroRotator;
 
-		//spawn boid
-		AAgent* agent = GetWorld()->SpawnActor<AAgent>(AAgent::StaticClass(), agentLocation, agentRotation);
-
-		//add boid to array for boid algorithm calculations
-		agentArray[i] = agent;
-	}
+	//spawn agent and return
+	return GetWorld()->SpawnActor<AAgent>(AAgent::StaticClass(), agentLocation, agentRotation);
 }
 
 void AAgentController::FindGlobalBest()
@@ -75,7 +85,5 @@ void AAgentController::FindGlobalBest()
 			globalBest = agentBest;
 		}
 	}
-
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, globalBest.ToString());
 }
 

@@ -30,6 +30,10 @@ public:
 
 	FVector currentVelocity;
 
+	bool toBeRespawned;
+	void SetToBeRespawned();
+	bool ShouldAgentBeRepawned();
+
 protected:
 	UStaticMeshComponent* AgentMesh;
 
