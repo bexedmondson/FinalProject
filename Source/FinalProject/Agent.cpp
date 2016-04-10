@@ -75,7 +75,7 @@ FVector AAgent::AlignToLandscape(FVector location)
 	if (traceSuccess)
 	{
 		location.Z = hitResult.Location.Z + 50;
-		SetActorRotation(hitResult.ImpactNormal);
+		SetActorRotation(hitResult.ImpactNormal.Rotation());
 	}
 	
 	return location;

@@ -5,8 +5,8 @@
 #include "Agent.h"
 
 // constants for this file
-static const int NUMBER_OF_AGENTS = 30; //number of agents to be spawned
-static const int SPAWN_SQUARE_SIZE = 2000; //length of side of agent spawn square DIVIDED BY TWO
+static const int NUMBER_OF_AGENTS = 40; //number of agents to be spawned
+static const int SPAWN_SQUARE_SIZE = 5000; //length of side of agent spawn square DIVIDED BY TWO
 
 AAgent* agentArray[NUMBER_OF_AGENTS] = {};
 
