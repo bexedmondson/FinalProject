@@ -5,7 +5,8 @@
 #include "GameFramework/Actor.h"
 #include "Goal.generated.h"
 
-enum class Team
+UENUM(BlueprintType)
+enum class ETeam : uint8
 { 
 	PLAYER,		
 	NEUTRAL,	
@@ -16,9 +17,6 @@ UCLASS()
 class FINALPROJECT_API AGoal : public AActor
 {
 	GENERATED_BODY()
-
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Enum)
-	Team team;
 	
 public:	
 	// Sets default values for this actor's properties
@@ -30,7 +28,10 @@ public:
 	// Called every frame
 	virtual void Tick( float DeltaSeconds ) override;
 
-	Team GetTeam();
+	ETeam GetTeam();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Enum)
+	ETeam team;
 
 protected:
 	UStaticMeshComponent* GoalMesh;

@@ -36,7 +36,7 @@ AGoal::AGoal()
 	SphereComponent->InitSphereRadius(20.0);
 	SphereComponent->SetCollisionProfileName("GoalCollider");
 
-	team = Team::NEUTRAL;
+	team = ETeam::NEUTRAL;
 }
 
 // Called when the game starts or when spawned
@@ -88,11 +88,11 @@ void AGoal::CheckForActorsInSphere()
 
 	if (numOfBoidsInSphere > 10 && numOfAgentsInSphere < 5)
 	{
-		team = Team::PLAYER;
+		team = ETeam::PLAYER;
 	}
 	else if (numOfBoidsInSphere < 10 && numOfAgentsInSphere > 5)
 	{
-		team = Team::ENEMY;
+		team = ETeam::ENEMY;
 		for (AAgent* agent : nearbyAgents)
 		{
 			agent->SetToBeRespawned();
@@ -101,21 +101,21 @@ void AGoal::CheckForActorsInSphere()
 	else if (numOfBoidsInSphere > 10 && numOfAgentsInSphere > 3)
 	{
 		//both teams are fighting over the same one, set to neutral
-		team = Team::NEUTRAL;
+		team = ETeam::NEUTRAL;
 	}
 }
 
 FColor AGoal::GetTeamColour()
 {
-	if (team == Team::PLAYER)
+	if (team == ETeam::PLAYER)
 	{
 		return PLAYER_COLOUR;
 	}
-	else if (team == Team::NEUTRAL)
+	else if (team == ETeam::NEUTRAL)
 	{
 		return NEUTRAL_COLOUR;
 	}
-	else if (team == Team::ENEMY)
+	else if (team == ETeam::ENEMY)
 	{
 		return ENEMY_COLOUR;
 	}
@@ -123,7 +123,7 @@ FColor AGoal::GetTeamColour()
 	return FColor::White;
 }
 
-Team AGoal::GetTeam()
+ETeam AGoal::GetTeam()
 {
 	return team;
 }

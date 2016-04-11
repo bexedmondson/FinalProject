@@ -45,12 +45,12 @@ void AGoalController::CalculateScores()
 
 	for (AGoal* goal : goalArray)
 	{
-		Team goalTeam = goal->GetTeam();
-		if (goalTeam == Team::PLAYER)
+		ETeam goalTeam = goal->GetTeam();
+		if (goalTeam == ETeam::PLAYER)
 		{
 			playerGoalCount++;
 		}
-		else if (goalTeam == Team::ENEMY)
+		else if (goalTeam == ETeam::ENEMY)
 		{
 			enemyGoalCount++;
 		}
