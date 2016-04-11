@@ -25,6 +25,8 @@ void AGoalController::BeginPlay()
 	{
 		goalArray.Add(*Itr);
 	}
+
+	NeutralGoalScore = 1; //so the game doesn't immediately think the player has won
 }
 
 // Called every frame
