@@ -52,18 +52,6 @@ void AGoal::Tick( float DeltaTime )
 	Super::Tick( DeltaTime );
 
 	CheckForActorsInSphere();
-
-	if (team == Team::ENEMY) {
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, "enemy");
-	}
-	else if (team == Team::NEUTRAL) 
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, "neutral");
-	}
-	else if (team == Team::PLAYER)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, "player");
-	}
 }
 
 void AGoal::CheckForActorsInSphere()

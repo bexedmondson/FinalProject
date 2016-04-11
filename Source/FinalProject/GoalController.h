@@ -20,6 +20,19 @@ public:
 	// Called every frame
 	virtual void Tick( float DeltaSeconds ) override;
 
+	/** Player Goal Score */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = GoalScore)
+	int32 PlayerGoalScore;
+
+	/** Neutral Goal Score */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = GoalScore)
+	int32 NeutralGoalScore;
+
+	/** Enemy Goal Score */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = GoalScore)
+	int32 EnemyGoalScore;
+
+private:
 	
-	
+	void CalculateScores();
 };
