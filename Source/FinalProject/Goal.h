@@ -30,11 +30,12 @@ public:
 	// Called every frame
 	virtual void Tick( float DeltaSeconds ) override;
 
+	Team GetTeam();
+
 protected:
 	UStaticMeshComponent* GoalMesh;
 
 	void CheckForActorsInSphere();
 
 	FColor GetTeamColour();
-	Team GetTeam();
 };
