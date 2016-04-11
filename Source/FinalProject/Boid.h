@@ -5,6 +5,8 @@
 #include "GameFramework/Actor.h"
 #include "Boid.generated.h"
 
+#define FloorChannel ECC_Pawn
+
 UCLASS()
 class FINALPROJECT_API ABoid : public AActor
 {
@@ -19,10 +21,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Movement)
 		FVector currentVelocity;
 
-	/** Boid new movement component */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Movement)
-		FVector newVelocity;
-
 	/** Boid rotation component */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Movement)
 		FRotator rotation;
@@ -34,9 +32,15 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaSeconds) override;
 
+
 	FVector CalculateBoidVelocity();
 
-	void SetVelocity(FVector velocity);
+	// for goalseeking
+	FVector target;
+	void SetTarget(FVector boidTarget);
+
+	// Corner of bounding box, set by BoidController
+	FVector boundingBoxCorner;
 
 
 protected:
@@ -46,4 +50,16 @@ protected:
 	FVector AlignBoid(TArray<FRotator> nearbyBoidRotations);
 	FVector CohereBoid(TArray<FVector> nearbyBoidLocations);
 
+	FVector KeepBoidInBox();
+	FVector KeepBoidAboveFloor();
+
+	bool Trace(
+		UWorld* World,
+		AActor* ActorToIgnore,
+		const FVector& Start,
+		const FVector& End,
+		FHitResult& HitOut,
+		ECollisionChannel CollisionChannel = FloorChannel,
+		bool ReturnPhysMat = false
+		);
 };

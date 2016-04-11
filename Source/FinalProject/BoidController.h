@@ -24,14 +24,12 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaSeconds) override;
 
-	//number of boids to be spawned
-	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement)
-	int numOfBoids;
+	void SetControllerTarget(FVector target);
 
 protected:
 	UWorld* World;
 
-	ABoid* boidArray[];
-
 	void GenerateBoids();
+
+	FVector boidTarget;
 };
