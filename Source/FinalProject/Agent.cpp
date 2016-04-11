@@ -3,10 +3,10 @@
 #include "FinalProject.h"
 #include "Agent.h"
 
-static const float ACTOR_SCALE = 100.0f;
+static const float ACTOR_SCALE = 0.3f;
 
 static const float PBEST_COEFFICIENT = 0.01;
-static const float GBEST_COEFFICIENT = 0.007;
+static const float GBEST_COEFFICIENT = 0.002;
 
 // Sets default values
 AAgent::AAgent()
@@ -15,7 +15,7 @@ AAgent::AAgent()
 	PrimaryActorTick.bCanEverTick = true;
 
 	// static mesh for visualisation
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeMeshAsset(TEXT("StaticMesh'/Game/Meshes/agent0_0.agent0_0'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeMeshAsset(TEXT("StaticMesh'/Game/Meshes/insect.insect'"));
 	if (CubeMeshAsset.Succeeded())
 	{
 		PrimaryActorTick.bCanEverTick = true;
@@ -77,7 +77,7 @@ FVector AAgent::AlignToLandscape(FVector location)
 	if (traceSuccess)
 	{
 		location.Z = hitResult.Location.Z + 50;
-		SetActorRotation(hitResult.ImpactNormal.Rotation());
+		SetActorRotation(hitResult.ImpactNormal.Rotation() + FRotator(-90,0,0));
 	}
 	
 	return location;

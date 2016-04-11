@@ -25,12 +25,43 @@ void AGoalController::BeginPlay()
 	{
 		goalArray.Add(*Itr);
 	}
+
+	NeutralGoalScore = 1; //so the game doesn't immediately think the player has won
 }
 
 // Called every frame
 void AGoalController::Tick( float DeltaTime )
 {
 	Super::Tick( DeltaTime );
+	
+	CalculateScores();
+}
 
+void AGoalController::CalculateScores()
+{
+	int playerGoalCount = 0;
+	int neutralGoalCount = 0;
+	int enemyGoalCount = 0;
+
+	for (AGoal* goal : goalArray)
+	{
+		Team goalTeam = goal->GetTeam();
+		if (goalTeam == Team::PLAYER)
+		{
+			playerGoalCount++;
+		}
+		else if (goalTeam == Team::ENEMY)
+		{
+			enemyGoalCount++;
+		}
+		else
+		{
+			neutralGoalCount++;
+		}
+	}
+
+	PlayerGoalScore = playerGoalCount;
+	NeutralGoalScore = neutralGoalCount;
+	EnemyGoalScore = enemyGoalCount;
 }
 
