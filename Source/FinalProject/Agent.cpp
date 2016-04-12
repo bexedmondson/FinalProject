@@ -5,8 +5,9 @@
 
 static const float ACTOR_SCALE = 0.3f;
 
-static const float PBEST_COEFFICIENT = 0.01;
+static const float PBEST_COEFFICIENT = 0.4;
 static const float GBEST_COEFFICIENT = 0.002;
+static const float RANDOM_COEFFICIENT = 0.5;
 
 // Sets default values
 AAgent::AAgent()
@@ -34,6 +35,11 @@ void AAgent::BeginPlay()
 	toBeRespawned = false;
 
 	SetActorLocation(AlignToLandscape(GetActorLocation()));
+
+	// start timer so that it can check regularly to see if it's got stuck
+	savedLocation = GetActorLocation();
+	FTimerHandle handle = FTimerHandle();
+	GetWorldTimerManager().SetTimer(handle, this, &AAgent::CheckIfStuck, FMath::RandRange(8, 12), true);
 
 	// scale to be more easily visible
 	SetActorScale3D(FVector(ACTOR_SCALE, ACTOR_SCALE, ACTOR_SCALE));
@@ -87,7 +93,8 @@ FVector AAgent::CalculateAgentVelocity()
 {
 	FVector pbestComponent = PBEST_COEFFICIENT * FMath::RandRange(0, 1) * (agentBestPosition - GetActorLocation());
 	FVector gbestComponent = GBEST_COEFFICIENT * FMath::RandRange(0, 1) * (globalBestPosition - GetActorLocation());
-	return pbestComponent + gbestComponent;
+	FVector randomComponent = RANDOM_COEFFICIENT * FVector(FMath::RandRange(0, 1), FMath::RandRange(0, 1), 0);
+	return pbestComponent + gbestComponent + randomComponent;
 }
 
 void AAgent::SetGlobalBest(FVector gBest)
@@ -109,6 +116,18 @@ void AAgent::SetToBeRespawned()
 bool AAgent::ShouldAgentBeRepawned()
 {
 	return toBeRespawned;
+}
+
+void AAgent::CheckIfStuck()
+{
+	if (FVector::Dist(GetActorLocation(), savedLocation) < 50)
+	{
+		SetToBeRespawned();
+	}
+	else
+	{
+		savedLocation = GetActorLocation();
+	}
 }
 
 //this utility code taken from https://wiki.unrealengine.com/Trace_Functions
