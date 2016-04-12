@@ -90,7 +90,7 @@ void AGoal::CheckForActorsInSphere()
 	{
 		team = ETeam::PLAYER;
 	}
-	else if (numOfBoidsInSphere < 10 && numOfAgentsInSphere > 0)
+	else if (numOfBoidsInSphere < 10 && numOfAgentsInSphere > 1)
 	{
 		team = ETeam::ENEMY;
 		for (AAgent* agent : nearbyAgents)
@@ -98,7 +98,7 @@ void AGoal::CheckForActorsInSphere()
 			agent->SetToBeRespawned();
 		}
 	}
-	else if (numOfBoidsInSphere > 10 && numOfAgentsInSphere > 0)
+	else if (numOfBoidsInSphere > 10)
 	{
 		//both teams are fighting over the same one, set to neutral
 		team = ETeam::NEUTRAL;
