@@ -11,6 +11,12 @@ AInputController::AInputController(const FObjectInitializer& ObjectInitializer)
 {
 	bEnableClickEvents = true;
 	bShowMouseCursor = true;
+
+	// Initialize audio component
+	static ConstructorHelpers::FObjectFinder<USoundCue> windSound(TEXT("SoundCue'/Game/Sounds/WindCue.WindCue'"));
+	windAudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("WindAudioComponent"));
+	windAudioComponent->SetSound(windSound.Object);
+	windAudioComponent->AttachParent = RootComponent;
 }
 
 void AInputController::BeginPlay()
@@ -38,6 +44,9 @@ void AInputController::OnLeftClick()
 	FVector clickedPosition = GetClickedPosition();
 
 	boidControllerPtr->SetControllerTarget(clickedPosition);
+
+	windAudioComponent->SetWorldLocation(clickedPosition);
+	windAudioComponent->Play();
 }
 
 FVector AInputController::GetClickedPosition()

@@ -27,6 +27,8 @@ class FINALPROJECT_API AInputController : public APlayerController
 		
 		FVector GetClickedPosition();
 
+		UAudioComponent* windAudioComponent;
+
 public:
 		void SetBoidControllerPtr(ABoidController* bControllerPtr);
 };

@@ -41,7 +41,10 @@ protected:
 	FVector AlignToLandscape(FVector location);
 
 	FVector CalculateAgentVelocity();
-	
+
+	FVector savedLocation;
+	void CheckIfStuck();
+
 	bool Trace(
 		UWorld* World,
 		AActor* ActorToIgnore,
