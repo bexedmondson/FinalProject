@@ -86,11 +86,11 @@ void AGoal::CheckForActorsInSphere()
 		}
 	}
 
-	if (numOfBoidsInSphere > 10 && numOfAgentsInSphere < 3)
+	if (numOfBoidsInSphere > 10 && numOfAgentsInSphere < 1)
 	{
 		team = ETeam::PLAYER;
 	}
-	else if (numOfBoidsInSphere < 10 && numOfAgentsInSphere > 3)
+	else if (numOfBoidsInSphere < 10 && numOfAgentsInSphere > 1)
 	{
 		team = ETeam::ENEMY;
 		for (AAgent* agent : nearbyAgents)
