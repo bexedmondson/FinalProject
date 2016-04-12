@@ -7,6 +7,7 @@ static const float ACTOR_SCALE = 0.3f;
 
 static const float PBEST_COEFFICIENT = 0.01;
 static const float GBEST_COEFFICIENT = 0.002;
+static const float RANDOM_COEFFICIENT = 3;
 
 // Sets default values
 AAgent::AAgent()
@@ -87,6 +88,7 @@ FVector AAgent::CalculateAgentVelocity()
 {
 	FVector pbestComponent = PBEST_COEFFICIENT * FMath::RandRange(0, 1) * (agentBestPosition - GetActorLocation());
 	FVector gbestComponent = GBEST_COEFFICIENT * FMath::RandRange(0, 1) * (globalBestPosition - GetActorLocation());
+	FVector randomComponent = RANDOM_COEFFICIENT * FVector(FMath::RandRange(0, 1), FMath::RandRange(0, 1), 0);
 	return pbestComponent + gbestComponent;
 }
 
