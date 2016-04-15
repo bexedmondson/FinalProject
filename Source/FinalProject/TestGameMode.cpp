@@ -2,7 +2,7 @@
 
 #include "FinalProject.h"
 #include "TestGameMode.h"
-#include "BoidController.h"
+#include "TestBoidController.h"
 #include "Boid.h"
 #include "AgentController.h"
 #include "InputController.h"
@@ -20,7 +20,7 @@ void ATestGameMode::StartPlay()
 
 	StartMatch();
 
-	ABoidController* boidControllerPtr = GetWorld()->SpawnActor<ABoidController>(ABoidController::StaticClass());
+	ATestBoidController* boidControllerPtr = GetWorld()->SpawnActor<ATestBoidController>(ATestBoidController::StaticClass());
 	AAgentController* agentControllerPtr = GetWorld()->SpawnActor<AAgentController>(AAgentController::StaticClass());
 	AGoalController* goalControllerPtr = GetWorld()->SpawnActor<AGoalController>(AGoalController::StaticClass());
 

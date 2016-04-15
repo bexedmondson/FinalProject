@@ -32,4 +32,6 @@ protected:
 	void GenerateBoids();
 
 	FVector boidTarget;
+
+	ABoid* GetBoidArray();
 };

@@ -29,8 +29,6 @@ void ABoidController::BeginPlay()
 // Called every frame
 void ABoidController::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
-
 	for (int i = 0; i < NUMBER_OF_BOIDS; i++)
 	{
 		boidArray[i]->SetTarget(boidTarget);
@@ -67,4 +65,9 @@ void ABoidController::GenerateBoids()
 void ABoidController::SetControllerTarget(FVector target)
 {
 	boidTarget = target;
+}
+
+ABoid* ABoidController::GetBoidArray()
+{
+	return boidArray;
 }

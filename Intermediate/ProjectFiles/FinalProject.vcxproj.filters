@@ -97,9 +97,15 @@
     <ClInclude Include="..\..\Source\FinalProject\TestGameMode.h">
       <Filter>Source\FinalProject</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\FinalProject\TestBoidController.h">
+      <Filter>Source\FinalProject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\FinalProject\TestGameMode.cpp">
+      <Filter>Source\FinalProject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\FinalProject\TestBoidController.cpp">
       <Filter>Source\FinalProject</Filter>
     </ClCompile>
   </ItemGroup>
