@@ -21,4 +21,6 @@ public:
 	
 	// Called every frame
 	virtual void Tick(float DeltaSeconds) override;
+
+	FString TestGenerateCorrectNumberOfBoids();
 };

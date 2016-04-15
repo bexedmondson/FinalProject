@@ -11,11 +11,32 @@ ATestBoidController::ATestBoidController(const FObjectInitializer& ObjectInitial
 
 void ATestBoidController::BeginPlay()
 {
-	Super::BeginPlay();
+
 }
 
 // Called every frame
 void ATestBoidController::Tick(float DeltaTime)
 {
 	
+}
+
+FString ATestBoidController::TestGenerateCorrectNumberOfBoids()
+{
+	Super::GenerateBoids();
+
+	int boidCount = 0;
+
+	for (TActorIterator<ABoid> Itr(GetWorld()); Itr; ++Itr)
+	{
+		boidCount++;
+	}
+
+	if (boidCount == Super::GetNumberOfBoids())
+	{
+		return "TestBoidController: TestGenerateCorrectNumberOfBoids: pass.";
+	}
+	else
+	{
+		return "TestBoidController: TestGenerateCorrectNumberOfBoids: fail.";
+	}
 }

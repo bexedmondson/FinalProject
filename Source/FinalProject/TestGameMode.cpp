@@ -8,6 +8,9 @@
 #include "InputController.h"
 #include "GoalController.h"
 
+ATestBoidController* testBoidControllerPtr = NULL;
+int frameCount;
+
 ATestGameMode::ATestGameMode(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
@@ -19,14 +22,13 @@ void ATestGameMode::StartPlay()
 	Super::StartPlay();
 
 	StartMatch();
+	frameCount = 0;
 
-	ATestBoidController* boidControllerPtr = GetWorld()->SpawnActor<ATestBoidController>(ATestBoidController::StaticClass());
+	testBoidControllerPtr = GetWorld()->SpawnActor<ATestBoidController>(ATestBoidController::StaticClass());
 	AAgentController* agentControllerPtr = GetWorld()->SpawnActor<AAgentController>(AAgentController::StaticClass());
 	AGoalController* goalControllerPtr = GetWorld()->SpawnActor<AGoalController>(AGoalController::StaticClass());
 
-	inputControllerPtr->SetBoidControllerPtr(boidControllerPtr);
-
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, "TESTING");
+	inputControllerPtr->SetBoidControllerPtr(testBoidControllerPtr);
 }
 
 APlayerController* ATestGameMode::SpawnPlayerController(ENetRole RemoteRole, FVector const& SpawnLocation, FRotator const& SpawnRotation)
@@ -38,4 +40,30 @@ APlayerController* ATestGameMode::SpawnPlayerController(ENetRole RemoteRole, FVe
 	return pc;
 }
 
+void ATestGameMode::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
 
+	//run some tests shortly after level has loaded, but only run once
+	bool haveTenthFrameTestsRun = false;
+
+	if (!haveTenthFrameTestsRun && frameCount > 10) {
+		RunTests();
+		haveTenthFrameTestsRun = true;
+	}
+
+	if (haveTenthFrameTestsRun)
+	{
+		UGameplayStatics::OpenLevel(this, "Main");
+	}
+
+	frameCount++;
+}
+
+void ATestGameMode::RunTests()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, testBoidControllerPtr->TestGenerateCorrectNumberOfBoids());
+
+	//if (allStrings.Contains("fail")
+	//	print message? idk do something
+}

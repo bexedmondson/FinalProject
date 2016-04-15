@@ -18,9 +18,15 @@ class FINALPROJECT_API ATestGameMode : public AGameMode
 
 	virtual void StartPlay() override;
 
+	virtual void Tick(float DeltaSeconds) override;
+
 	//override spawnplayercontroller so we can get a reference to the controller
 	virtual APlayerController* SpawnPlayerController(ENetRole RemotrRole, FVector const& SpawnLocation, FRotator const& SpawnRotation) override;
 
 	UPROPERTY()
 	AInputController* inputControllerPtr;
+
+protected:
+
+	void RunTests();
 };
