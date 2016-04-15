@@ -33,5 +33,5 @@ protected:
 
 	FVector boidTarget;
 
-	ABoid* GetBoidArray();
+	TArray<ABoid*> GetBoidArray();
 };
