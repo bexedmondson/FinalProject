@@ -1,97 +1,106 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-
 <Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-	<ItemGroup>
-		<None Include="..\..\FinalProject.uproject" />
-		<Filter Include="Source">
-			<UniqueIdentifier>{A9B8799A-B14E-476D-85EC-9803FEA096C5}</UniqueIdentifier>
-		</Filter>
-		<None Include="..\..\Source\FinalProject.Target.cs">
-			<Filter>Source</Filter>
-		</None >
-		<None Include="..\..\Source\FinalProjectEditor.Target.cs">
-			<Filter>Source</Filter>
-		</None >
-		<Filter Include="Config">
-			<UniqueIdentifier>{9AD97950-C550-41EA-B09D-EA9B828AAAA7}</UniqueIdentifier>
-		</Filter>
-		<None Include="..\..\Config\DefaultEditor.ini">
-			<Filter>Config</Filter>
-		</None >
-		<None Include="..\..\Config\DefaultEngine.ini">
-			<Filter>Config</Filter>
-		</None >
-		<None Include="..\..\Config\DefaultGame.ini">
-			<Filter>Config</Filter>
-		</None >
-		<None Include="..\..\Config\DefaultInput.ini">
-			<Filter>Config</Filter>
-		</None >
-		<Filter Include="Source\FinalProject">
-			<UniqueIdentifier>{DF15514B-71F3-4FDD-902D-6E3A4037FF16}</UniqueIdentifier>
-		</Filter>
-		<ClCompile Include="..\..\Source\FinalProject\Agent.cpp">
-			<Filter>Source\FinalProject</Filter>
-		</ClCompile >
-		<ClInclude Include="..\..\Source\FinalProject\Agent.h">
-			<Filter>Source\FinalProject</Filter>
-		</ClInclude >
-		<ClCompile Include="..\..\Source\FinalProject\AgentController.cpp">
-			<Filter>Source\FinalProject</Filter>
-		</ClCompile >
-		<ClInclude Include="..\..\Source\FinalProject\AgentController.h">
-			<Filter>Source\FinalProject</Filter>
-		</ClInclude >
-		<ClCompile Include="..\..\Source\FinalProject\Boid.cpp">
-			<Filter>Source\FinalProject</Filter>
-		</ClCompile >
-		<ClInclude Include="..\..\Source\FinalProject\Boid.h">
-			<Filter>Source\FinalProject</Filter>
-		</ClInclude >
-		<ClCompile Include="..\..\Source\FinalProject\BoidController.cpp">
-			<Filter>Source\FinalProject</Filter>
-		</ClCompile >
-		<ClInclude Include="..\..\Source\FinalProject\BoidController.h">
-			<Filter>Source\FinalProject</Filter>
-		</ClInclude >
-		<ClCompile Include="..\..\Source\FinalProject\FinalGameMode.cpp">
-			<Filter>Source\FinalProject</Filter>
-		</ClCompile >
-		<ClInclude Include="..\..\Source\FinalProject\FinalGameMode.h">
-			<Filter>Source\FinalProject</Filter>
-		</ClInclude >
-		<None Include="..\..\Source\FinalProject\FinalProject.Build.cs">
-			<Filter>Source\FinalProject</Filter>
-		</None >
-		<ClCompile Include="..\..\Source\FinalProject\FinalProject.cpp">
-			<Filter>Source\FinalProject</Filter>
-		</ClCompile >
-		<ClInclude Include="..\..\Source\FinalProject\FinalProject.h">
-			<Filter>Source\FinalProject</Filter>
-		</ClInclude >
-		<ClCompile Include="..\..\Source\FinalProject\Goal.cpp">
-			<Filter>Source\FinalProject</Filter>
-		</ClCompile >
-		<ClInclude Include="..\..\Source\FinalProject\Goal.h">
-			<Filter>Source\FinalProject</Filter>
-		</ClInclude >
-		<ClCompile Include="..\..\Source\FinalProject\GoalController.cpp">
-			<Filter>Source\FinalProject</Filter>
-		</ClCompile >
-		<ClInclude Include="..\..\Source\FinalProject\GoalController.h">
-			<Filter>Source\FinalProject</Filter>
-		</ClInclude >
-		<ClCompile Include="..\..\Source\FinalProject\InputController.cpp">
-			<Filter>Source\FinalProject</Filter>
-		</ClCompile >
-		<ClInclude Include="..\..\Source\FinalProject\InputController.h">
-			<Filter>Source\FinalProject</Filter>
-		</ClInclude >
-		<ClCompile Include="..\..\Source\FinalProject\Team.cpp">
-			<Filter>Source\FinalProject</Filter>
-		</ClCompile >
-		<ClInclude Include="..\..\Source\FinalProject\Team.h">
-			<Filter>Source\FinalProject</Filter>
-		</ClInclude >
-	</ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\FinalProject.uproject" />
+    <Filter Include="Source">
+      <UniqueIdentifier>{A9B8799A-B14E-476D-85EC-9803FEA096C5}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\FinalProject.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <None Include="..\..\Source\FinalProjectEditor.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <Filter Include="Config">
+      <UniqueIdentifier>{9AD97950-C550-41EA-B09D-EA9B828AAAA7}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Config\DefaultEditor.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultEngine.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultGame.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultInput.ini">
+      <Filter>Config</Filter>
+    </None>
+    <Filter Include="Source\FinalProject">
+      <UniqueIdentifier>{DF15514B-71F3-4FDD-902D-6E3A4037FF16}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\FinalProject\Agent.cpp">
+      <Filter>Source\FinalProject</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\FinalProject\Agent.h">
+      <Filter>Source\FinalProject</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\FinalProject\AgentController.cpp">
+      <Filter>Source\FinalProject</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\FinalProject\AgentController.h">
+      <Filter>Source\FinalProject</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\FinalProject\Boid.cpp">
+      <Filter>Source\FinalProject</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\FinalProject\Boid.h">
+      <Filter>Source\FinalProject</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\FinalProject\BoidController.cpp">
+      <Filter>Source\FinalProject</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\FinalProject\BoidController.h">
+      <Filter>Source\FinalProject</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\FinalProject\FinalGameMode.cpp">
+      <Filter>Source\FinalProject</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\FinalProject\FinalGameMode.h">
+      <Filter>Source\FinalProject</Filter>
+    </ClInclude>
+    <None Include="..\..\Source\FinalProject\FinalProject.Build.cs">
+      <Filter>Source\FinalProject</Filter>
+    </None>
+    <ClCompile Include="..\..\Source\FinalProject\FinalProject.cpp">
+      <Filter>Source\FinalProject</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\FinalProject\FinalProject.h">
+      <Filter>Source\FinalProject</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\FinalProject\Goal.cpp">
+      <Filter>Source\FinalProject</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\FinalProject\Goal.h">
+      <Filter>Source\FinalProject</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\FinalProject\GoalController.cpp">
+      <Filter>Source\FinalProject</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\FinalProject\GoalController.h">
+      <Filter>Source\FinalProject</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\FinalProject\InputController.cpp">
+      <Filter>Source\FinalProject</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\FinalProject\InputController.h">
+      <Filter>Source\FinalProject</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\FinalProject\Team.cpp">
+      <Filter>Source\FinalProject</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\FinalProject\Team.h">
+      <Filter>Source\FinalProject</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Source\FinalProject\TestGameMode.h">
+      <Filter>Source\FinalProject</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Source\FinalProject\TestGameMode.cpp">
+      <Filter>Source\FinalProject</Filter>
+    </ClCompile>
+  </ItemGroup>
 </Project>
