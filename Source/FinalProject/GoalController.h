@@ -32,7 +32,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = GoalScore)
 	int32 EnemyGoalScore;
 
-private:
+protected:
 	
 	void CalculateScores();
 };

@@ -14,6 +14,7 @@ class FINALPROJECT_API AInputController : public APlayerController
 {
 	GENERATED_BODY()
 
+protected:
 		AInputController(const FObjectInitializer& ObjectInitializer);
 
 		virtual void BeginPlay() override;
