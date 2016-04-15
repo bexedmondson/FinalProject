@@ -66,7 +66,20 @@ void ABoidController::SetControllerTarget(FVector target)
 	boidTarget = target;
 }
 
+//test function
 TArray<ABoid*> ABoidController::GetBoidArray()
 {
 	return boidArray;
+}
+
+//test function
+int ABoidController::GetNumberOfBoids()
+{
+	return NUMBER_OF_BOIDS;
+}
+
+//test function
+int ABoidController::GetSpawnCubeSize()
+{
+	return SPAWN_CUBE_SIZE;
 }

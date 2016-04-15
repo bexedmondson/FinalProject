@@ -33,5 +33,8 @@ protected:
 
 	FVector boidTarget;
 
+	//test functions
 	TArray<ABoid*> GetBoidArray();
+	int GetNumberOfBoids();
+	int GetSpawnCubeSize();
 };
