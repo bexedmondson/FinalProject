@@ -44,9 +44,9 @@ void ABoidController::GenerateBoids()
 	for (int i = 0; i < NUMBER_OF_BOIDS; i++)
 	{
 		//generate random numbers for location
-		int randNumX = rand() % (SPAWN_CUBE_SIZE + SPAWN_CUBE_SIZE + 1) + -SPAWN_CUBE_SIZE;
-		int randNumY = rand() % (SPAWN_CUBE_SIZE + SPAWN_CUBE_SIZE + 1) + -SPAWN_CUBE_SIZE;
-		int randNumZ = rand() % (SPAWN_CUBE_SIZE + SPAWN_CUBE_SIZE + 1) + -SPAWN_CUBE_SIZE;
+		int randNumX = rand() % (SPAWN_CUBE_SIZE + SPAWN_CUBE_SIZE + 1) - SPAWN_CUBE_SIZE;
+		int randNumY = rand() % (SPAWN_CUBE_SIZE + SPAWN_CUBE_SIZE + 1) - SPAWN_CUBE_SIZE;
+		int randNumZ = rand() % (SPAWN_CUBE_SIZE + SPAWN_CUBE_SIZE + 1) - SPAWN_CUBE_SIZE;
 
 		//randomise spawn point and rotation
 		boidLocation = FVector(randNumX, randNumY, randNumZ);

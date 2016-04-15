@@ -4,6 +4,7 @@
 
 #include "GameFramework/GameMode.h"
 #include "InputController.h"
+#include "CoreMisc.h"
 #include "TestGameMode.generated.h"
 
 /**

@@ -7,6 +7,8 @@
 #include "AgentController.h"
 #include "InputController.h"
 #include "GoalController.h"
+#include "CoreMisc.h"
+#include "Paths.h"
 
 ATestBoidController* testBoidControllerPtr = NULL;
 int frameCount;
@@ -62,7 +64,17 @@ void ATestGameMode::Tick(float DeltaSeconds)
 
 void ATestGameMode::RunTests()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, testBoidControllerPtr->TestGenerateCorrectNumberOfBoids());
+	FString testFilenameString = FPaths::GameDir();
+	testFilenameString += "TestResults.log";
+
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, testFilenameString);
+	const TCHAR* testFileName = *testFilenameString;
+
+	FString testString1 = testBoidControllerPtr->TestGenerateCorrectNumberOfBoids();
+	
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, testString1);
+
+	FFileHelper::SaveStringToFile(testString1, testFileName);
 
 	//if (allStrings.Contains("fail")
 	//	print message? idk do something
