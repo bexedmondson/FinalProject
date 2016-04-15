@@ -64,18 +64,21 @@ void ATestGameMode::Tick(float DeltaSeconds)
 
 void ATestGameMode::RunTests()
 {
-	FString testFilenameString = FPaths::GameDir();
-	testFilenameString += "TestResults.log";
+	FString testFileNameString = FPaths::GameDir();
+	testFileNameString += "TestResults.log";
+	const TCHAR* testFileName = *testFileNameString;
 
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, testFilenameString);
-	const TCHAR* testFileName = *testFilenameString;
+	FFileHelper::SaveStringToFile(testBoidControllerPtr->TestGenerateCorrectNumberOfBoids(), testFileName);
 
-	FString testString1 = testBoidControllerPtr->TestGenerateCorrectNumberOfBoids();
-	
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, testString1);
-
-	FFileHelper::SaveStringToFile(testString1, testFileName);
-
-	//if (allStrings.Contains("fail")
-	//	print message? idk do something
+	FString results;
+	FFileHelper::LoadFileToString(results, testFileName);
+	if (results.Contains("fail"))
+	{
+		//CHANGE THIS TO SOMETHING ON HUD
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, "Test failed, check TestResults.log for details.");
+	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, "All tests passed.");
+	}
 }
