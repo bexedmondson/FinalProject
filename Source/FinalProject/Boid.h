@@ -25,8 +25,6 @@ public:
 	// for goalseeking
 	void SetTarget(FVector boidTarget);
 
-	FVector CalculateBoidVelocity();
-
 protected:
 	UStaticMeshComponent* BoidMesh;
 
@@ -39,6 +37,9 @@ protected:
 	// corner of bounding box, set by BoidController
 	FVector boundingBoxCorner;
 
+	//perform boid algorithm
+	FVector CalculateBoidVelocity();
+
 	// functions to calculate main components of boids algorithm
 	FVector SeparateBoid(TArray<FVector> nearbyBoidLocations);
 	FVector AlignBoid(TArray<FRotator> nearbyBoidRotations);
@@ -46,4 +47,8 @@ protected:
 
 	// additions to main boids algorithm to keep flock contained and to enable goalseeking
 	FVector KeepBoidInBox();
+
+	// test functions
+	FVector GetCurrentVelocity();
+	void SetCurrentVelocity(FVector velocity);
 };

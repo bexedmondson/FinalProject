@@ -237,6 +237,18 @@ FVector ABoid::KeepBoidInBox()
 
 void ABoid::SetTarget(FVector boidTarget)
 {
-	boundingBoxCorner = boidTarget;
+	boundingBoxCorner = boidTarget - FVector(BOUNDING_BOX_SIZE, BOUNDING_BOX_SIZE, BOUNDING_BOX_SIZE);
 	boundingBoxCorner.Z += AVERAGE_DIST_ABOVE_FLOOR;
+}
+
+// test function
+FVector ABoid::GetCurrentVelocity()
+{
+	return currentVelocity;
+}
+
+// test function
+void ABoid::SetCurrentVelocity(FVector velocity)
+{
+	currentVelocity = velocity;
 }

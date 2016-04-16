@@ -39,7 +39,10 @@ FString ATestBoidController::TestGenerateCorrectNumberOfBoids()
 	}
 	else
 	{
-		return "TestBoidController: TestGenerateCorrectNumberOfBoids: fail.";
+		FString errorMessage = "TestBoidController: TestGenerateCorrectNumberOfBoids: fail.\n";
+		errorMessage += "Expected value: " + FString::FromInt(Super::GetNumberOfBoids()) + "\n";
+		errorMessage += "Actual value:   " + FString::FromInt(boidCount);
+		return errorMessage;
 	}
 }
 
@@ -47,14 +50,17 @@ FString ATestBoidController::TestGenerateBoidsOnlyInBox()
 {
 	Super::GenerateBoids();
 	bool boidsInBox = true;
+	FVector boidOutOfBoxLocation;
 
-	FBox spawnBox = FBox(FVector(-Super::GetSpawnCubeSize()), FVector(-Super::GetSpawnCubeSize()));
+	FBox spawnBox = FBox(FVector(-Super::GetSpawnCubeSize()), FVector(Super::GetSpawnCubeSize()));
 
 	for (TActorIterator<ABoid> Itr(GetWorld()); Itr; ++Itr)
 	{
-		if (spawnBox.IsInside(Itr->GetActorLocation()))
+		if (!spawnBox.IsInsideOrOn(Itr->GetActorLocation()))
 		{
 			boidsInBox = false;
+			boidOutOfBoxLocation = Itr->GetActorLocation();
+			break;
 		}
 	}
 
@@ -64,6 +70,9 @@ FString ATestBoidController::TestGenerateBoidsOnlyInBox()
 	}
 	else
 	{
-		return "TestBoidController: TestGenerateBoidsOnlyInBox: fail.";
+		FString errorMessage = "TestBoidController: TestGenerateBoidsOnlyInBox: fail.\n";
+		errorMessage += "Box max: " + spawnBox.Max.ToCompactString() + " Box min: " + spawnBox.Min.ToCompactString() + "\n";
+		errorMessage += "Boid found: " + boidOutOfBoxLocation.ToCompactString();
+		return errorMessage;
 	}
 }

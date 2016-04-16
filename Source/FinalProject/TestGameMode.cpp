@@ -3,7 +3,7 @@
 #include "FinalProject.h"
 #include "TestGameMode.h"
 #include "TestBoidController.h"
-#include "Boid.h"
+#include "TestBoid.h"
 #include "AgentController.h"
 #include "InputController.h"
 #include "GoalController.h"
@@ -71,8 +71,8 @@ void ATestGameMode::RunTests()
 
 	FString testResultString = FDateTime::Now().ToString() + "\n";
 
-	testResultString += testBoidControllerPtr->TestGenerateCorrectNumberOfBoids() + "\n";
-	testResultString += testBoidControllerPtr->TestGenerateBoidsOnlyInBox() + "\n";
+	testResultString += RunBoidControllerTests() + "\n";
+	testResultString += RunBoidTests() + "\n";
 
 	FFileHelper::SaveStringToFile(testResultString, testFileName);
 
@@ -85,4 +85,26 @@ void ATestGameMode::RunTests()
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, "All tests passed.");
 	}
+}
+
+FString ATestGameMode::RunBoidControllerTests()
+{
+	FString boidControllerTestResultString = "";
+
+	boidControllerTestResultString += testBoidControllerPtr->TestGenerateCorrectNumberOfBoids() + "\n";
+	boidControllerTestResultString += testBoidControllerPtr->TestGenerateBoidsOnlyInBox() + "\n";
+	
+	return boidControllerTestResultString;
+}
+
+FString ATestGameMode::RunBoidTests()
+{
+	FString boidTestResultString = "";
+	//spawn test boid
+	ATestBoid* testBoid = GetWorld()->SpawnActor<ATestBoid>(ATestBoid::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
+
+	boidTestResultString += testBoid->TestCalculateVelocityInBoxAndAlone() + "\n";
+	boidTestResultString += testBoid->TestCalculateVelocityOutOfBoxAndAlone() + "\n";
+
+	return boidTestResultString;
 }

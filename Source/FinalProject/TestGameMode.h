@@ -5,6 +5,7 @@
 #include "GameFramework/GameMode.h"
 #include "InputController.h"
 #include "CoreMisc.h"
+#include "TestBoid.h"
 #include "TestGameMode.generated.h"
 
 /**
@@ -30,4 +31,9 @@ class FINALPROJECT_API ATestGameMode : public AGameMode
 protected:
 
 	void RunTests();
+
+	FString RunBoidControllerTests();
+	FString RunBoidTests();
+
+	//setup and teardown methods for testing
 };
