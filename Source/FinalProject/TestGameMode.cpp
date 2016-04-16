@@ -100,11 +100,14 @@ FString ATestGameMode::RunBoidControllerTests()
 FString ATestGameMode::RunBoidTests()
 {
 	FString boidTestResultString = "";
+
 	//spawn test boid
 	ATestBoid* testBoid = GetWorld()->SpawnActor<ATestBoid>(ATestBoid::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
 
+	//RESPAWN BOID BEFORE EACH TEST?? WHY IS X DECREASING?
 	boidTestResultString += testBoid->TestCalculateVelocityInBoxAndAlone() + "\n";
 	boidTestResultString += testBoid->TestCalculateVelocityOutOfBoxAndAlone() + "\n";
+	boidTestResultString += testBoid->TestCalculateVelocityInBoxAndNearOne() + "\n";
 
 	return boidTestResultString;
 }

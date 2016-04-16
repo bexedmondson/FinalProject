@@ -24,5 +24,5 @@ public:
 	
 	FString TestCalculateVelocityInBoxAndAlone();
 	FString TestCalculateVelocityOutOfBoxAndAlone();
-	
+	FString TestCalculateVelocityInBoxAndNearOne();
 };
