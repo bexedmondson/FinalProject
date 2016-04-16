@@ -23,4 +23,5 @@ public:
 	virtual void Tick(float DeltaSeconds) override;
 
 	FString TestGenerateCorrectNumberOfBoids();
+	FString TestGenerateBoidsOnlyInBox();
 };

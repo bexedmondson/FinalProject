@@ -68,17 +68,20 @@ void ATestGameMode::RunTests()
 	testFileNameString += "TestResults.log";
 	const TCHAR* testFileName = *testFileNameString;
 
-	FFileHelper::SaveStringToFile(testBoidControllerPtr->TestGenerateCorrectNumberOfBoids(), testFileName);
+	FString testResultString;
 
-	FString results;
-	FFileHelper::LoadFileToString(results, testFileName);
-	if (results.Contains("fail"))
+	testResultString += testBoidControllerPtr->TestGenerateCorrectNumberOfBoids() + "\n";
+	testResultString += testBoidControllerPtr->TestGenerateBoidsOnlyInBox() + "\n";
+
+	FFileHelper::SaveStringToFile(testResultString, testFileName);
+
+	if (testResultString.Contains("fail"))
 	{
 		//CHANGE THIS TO SOMETHING ON HUD
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, "Test failed, check TestResults.log for details.");
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, "Test failed, check TestResults.log for details.");
 	}
 	else
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, "All tests passed.");
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, "All tests passed.");
 	}
 }

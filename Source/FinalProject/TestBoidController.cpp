@@ -31,6 +31,8 @@ FString ATestBoidController::TestGenerateCorrectNumberOfBoids()
 		boidCount++;
 	}
 
+	Super::EmptyBoidArray();
+
 	if (boidCount == Super::GetNumberOfBoids())
 	{
 		return "TestBoidController: TestGenerateCorrectNumberOfBoids: pass.";
@@ -38,5 +40,30 @@ FString ATestBoidController::TestGenerateCorrectNumberOfBoids()
 	else
 	{
 		return "TestBoidController: TestGenerateCorrectNumberOfBoids: fail.";
+	}
+}
+
+FString ATestBoidController::TestGenerateBoidsOnlyInBox()
+{
+	Super::GenerateBoids();
+	bool boidsInBox = true;
+
+	FBox spawnBox = FBox(FVector(-Super::GetSpawnCubeSize()), FVector(-Super::GetSpawnCubeSize()));
+
+	for (TActorIterator<ABoid> Itr(GetWorld()); Itr; ++Itr)
+	{
+		if (spawnBox.IsInside(Itr->GetActorLocation()))
+		{
+			boidsInBox = false;
+		}
+	}
+
+	if (boidsInBox)
+	{
+		return "TestBoidController: TestGenerateBoidsOnlyInBox: pass.";
+	}
+	else
+	{
+		return "TestBoidController: TestGenerateBoidsOnlyInBox: fail.";
 	}
 }

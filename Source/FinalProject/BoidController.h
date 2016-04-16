@@ -16,6 +16,7 @@ class FINALPROJECT_API ABoidController : public AAIController
 	GENERATED_BODY()
 
 public:
+	// constructor
 	ABoidController(const FObjectInitializer& ObjectInitializer);
 
 	// Called when the game starts or when spawned
@@ -27,14 +28,15 @@ public:
 	void SetControllerTarget(FVector target);
 
 protected:
-	UWorld* World;
-
+	// generate a set number of boids within a box
 	void GenerateBoids();
 
+	// 3d point that all boids move towards
 	FVector boidTarget;
 
-	//test functions
+	// test functions
 	TArray<ABoid*> GetBoidArray();
+	void EmptyBoidArray();
 	int GetNumberOfBoids();
 	int GetSpawnCubeSize();
 };

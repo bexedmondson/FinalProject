@@ -8,27 +8,27 @@
 static const int NUMBER_OF_BOIDS = 30; //number of boids to be spawned
 static const int SPAWN_CUBE_SIZE = 200; //length of side of boid spawn cube DIVIDED BY TWO
 
+// array that stores pointers to all boids
 TArray<ABoid*> boidArray;
 
 ABoidController::ABoidController(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
-
+	// initialise boid array to be empty
+	boidArray.Empty();
 }
 
 void ABoidController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	World = GetWorld();
-
-	boidArray.Empty();
 	GenerateBoids();
 }
 
 // Called every frame
 void ABoidController::Tick(float DeltaTime)
 {
+	// set target for every boid
 	for (ABoid* boid : boidArray)
 	{
 		boid->SetTarget(boidTarget);
@@ -37,7 +37,7 @@ void ABoidController::Tick(float DeltaTime)
 
 void ABoidController::GenerateBoids() 
 {
-
+	// initialise variables for boid instantiations
 	FVector boidLocation = FVector();
 	FRotator boidRotation = FRotator();
 
@@ -65,19 +65,25 @@ void ABoidController::SetControllerTarget(FVector target)
 	boidTarget = target;
 }
 
-//test function
+// test function
 TArray<ABoid*> ABoidController::GetBoidArray()
 {
 	return boidArray;
 }
 
-//test function
+// test function
+void ABoidController::EmptyBoidArray()
+{
+	boidArray.Empty();
+}
+
+// test function
 int ABoidController::GetNumberOfBoids()
 {
 	return NUMBER_OF_BOIDS;
 }
 
-//test function
+// test function
 int ABoidController::GetSpawnCubeSize()
 {
 	return SPAWN_CUBE_SIZE;
