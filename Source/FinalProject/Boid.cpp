@@ -4,20 +4,20 @@
 #include "Boid.h"
 
 // constants for this file
-static const float OUTER_SPHERE_RADIUS = 10.0f; //for cohesion and alignment
-static const float INNER_SPHERE_RADIUS = 50.0f; //for separation - I don't know why this one has to be a bigger number for a smaller sphere, units make no sense
+static const float OUTER_SPHERE_RADIUS = 10.0f; // for cohesion and alignment
+static const float INNER_SPHERE_RADIUS = 50.0f; // for separation - I don't know why this one has to be a bigger number for a smaller sphere, units make no sense
 
 static const float ACTOR_SCALE = 12.0f;
 
+// coefficients for boids algorithm
 static const float SEPARATION_COEFFICIENT = 0.09;
 static const float ALIGNMENT_COEFFICIENT = 0.04;
 static const float COHESION_COEFFICIENT = 0.04;
 static const float BOUNDING_BOX_COEFFICIENT = 0.005;
-static const float ABOVE_FLOOR_COEFFICIENT = 0.04;
 
 static const float MAX_SPEED = 4;
 
-static const float BOUNDING_BOX_SIZE = 150;
+static const float BOUNDING_BOX_SIZE = 200;
 static const float AVERAGE_DIST_ABOVE_FLOOR = 100;
 static const float MIN_DIST_ABOVE_FLOOR = 50;
 
@@ -62,7 +62,7 @@ void ABoid::BeginPlay()
 	rotation = FRotator::ZeroRotator;
 
 	//initialise bounding box
-	boundingBoxCorner = FVector(-50, -50, -50);
+	boundingBoxCorner = FVector(-100, 100, -100);
 }
 
 // Called every frame
@@ -70,8 +70,8 @@ void ABoid::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	// calculate new velocity and rotation
 	FVector totalVelocity = (currentVelocity + CalculateBoidVelocity()).GetClampedToMaxSize(MAX_SPEED);
-
 	rotation = totalVelocity.Rotation();
 
 	SetActorLocationAndRotation(GetActorLocation() + totalVelocity, rotation);
@@ -116,9 +116,8 @@ FVector ABoid::CalculateBoidVelocity()
 	{
 		// there are no nearby boids, just stay in box
 		FVector b = KeepBoidInBox() * BOUNDING_BOX_COEFFICIENT;
-		FVector f = KeepBoidAboveFloor() * ABOVE_FLOOR_COEFFICIENT;
 
-		total = b + f;
+		total = b;
 	}
 	else if (immediateBoidLocations.Num() == 0)
 	{
@@ -126,9 +125,8 @@ FVector ABoid::CalculateBoidVelocity()
 		FVector a = AlignBoid(nearbyBoidRotations) * ALIGNMENT_COEFFICIENT;
 		FVector c = CohereBoid(nearbyBoidLocations) * COHESION_COEFFICIENT;
 		FVector b = KeepBoidInBox() * BOUNDING_BOX_COEFFICIENT;
-		FVector f = KeepBoidAboveFloor() * ABOVE_FLOOR_COEFFICIENT;
 
-		total = a + c + b + f;
+		total = a + c + b;
 	}
 	else
 	{
@@ -137,9 +135,8 @@ FVector ABoid::CalculateBoidVelocity()
 		FVector a = AlignBoid(nearbyBoidRotations) * ALIGNMENT_COEFFICIENT;
 		FVector c = CohereBoid(nearbyBoidLocations) * COHESION_COEFFICIENT;
 		FVector b = KeepBoidInBox() * BOUNDING_BOX_COEFFICIENT;
-		FVector f = KeepBoidAboveFloor() * ABOVE_FLOOR_COEFFICIENT;
 
-		total = (s + a + c + b + f);
+		total = s + a + c + b;
 	}
 
 	return total;
@@ -151,19 +148,20 @@ FVector ABoid::SeparateBoid(TArray<FVector> immediateBoidLocations)
 
 	FVector separationSteer = actorLocation - immediateBoidLocations[0];
 
+	// calculate difference in location for each nearby boid
 	for (int i = 0; i < immediateBoidLocations.Num(); i++) {
 		FVector nbLocation = immediateBoidLocations[i];
 
 		if (actorLocation != nbLocation)
 		{
-			//current location - other location because steering away from other location
+			// current location - other location because steering away from other location
 			FVector diff = actorLocation - nbLocation;
 
 			separationSteer += diff;
 		}
 	}
 
-	//average out the steer
+	// average out the steer
 	return separationSteer / immediateBoidLocations.Num();
 }
 
@@ -176,6 +174,7 @@ FVector ABoid::AlignBoid(TArray<FRotator> nearbyBoidRotations)
 	float totalYaw = nearbyBoidRotations[0].Yaw;
 	float totalRoll = nearbyBoidRotations[0].Roll;
 
+	// calculate difference in roation for each nearby boid
 	for (int i = 0; i < nearbyBoidRotations.Num(); i++) {
 		FRotator nbRotation = nearbyBoidRotations[i];
 
@@ -184,7 +183,7 @@ FVector ABoid::AlignBoid(TArray<FRotator> nearbyBoidRotations)
 		totalRoll += nbRotation.Roll;
 	}
 
-	//average out the alignment
+	// average out the alignment
 	totalPitch = totalPitch / nearbyBoidRotations.Num();
 	totalYaw = totalYaw / nearbyBoidRotations.Num();
 	totalRoll = totalRoll / nearbyBoidRotations.Num();
@@ -202,19 +201,20 @@ FVector ABoid::CohereBoid(TArray<FVector> nearbyBoidLocations)
 
 	FVector cohesionSteer = nearbyBoidLocations[0] - actorLocation;
 
+	// calculate difference in location for each very near boid
 	for (int i = 1; i < nearbyBoidLocations.Num(); i++) {
 		FVector nbLocation = nearbyBoidLocations[i];
 
 		if (actorLocation != nbLocation)
 		{
-			//other location - current location because steering towards other location
+			// other location - current location because steering towards other location
 			FVector diff = nbLocation - actorLocation;
 
 			cohesionSteer += diff;
 		}
 	}
 
-	//average out the total and get the direction this boid should be steering in
+	// average out the total and get the direction this boid should be steering in
 	return cohesionSteer / nearbyBoidLocations.Num();
 }
 
@@ -226,6 +226,7 @@ FVector ABoid::KeepBoidInBox()
 
 	FBox boundingBox = FBox(boundingBoxCorner, boundingBoxCorner + BOUNDING_BOX_SIZE);
 
+	// calculate vector towards centre of target box if the boid is not already in the box
 	if (!boundingBox.IsInside(actorLocation))
 	{
 		boxSteer = boundingBox.GetCenter() - actorLocation;
@@ -234,78 +235,8 @@ FVector ABoid::KeepBoidInBox()
 	return boxSteer;
 }
 
-FVector ABoid::KeepBoidAboveFloor()
-{
-	FVector actorLocation = GetActorLocation();
-
-	FVector upSteer = FVector::ZeroVector;
-
-	FHitResult floorPointBelowBoid = FHitResult();
-	FVector pointUnderFloor = FVector(actorLocation);
-	pointUnderFloor.Z = -1000;
-
-	bool didTraceHit = Trace(GetWorld(), this, actorLocation, pointUnderFloor, floorPointBelowBoid);
-
-	if (didTraceHit)
-	{
-		float dist = actorLocation.Z - floorPointBelowBoid.Location.Z;
-
-		if (dist < MIN_DIST_ABOVE_FLOOR && dist > 0)
-		{
-			upSteer = FVector::UpVector * (1 / dist);
-		}
-		else if (dist < 0)
-		{
-			upSteer = FVector::UpVector * MIN_DIST_ABOVE_FLOOR;
-		}
-	}
-
-	return upSteer;
-}
-
 void ABoid::SetTarget(FVector boidTarget)
 {
 	boundingBoxCorner = boidTarget;
 	boundingBoxCorner.Z += AVERAGE_DIST_ABOVE_FLOOR;
-}
-
-
-//this utility code taken from https://wiki.unrealengine.com/Trace_Functions
-bool ABoid::Trace(
-	UWorld* World,
-	AActor* ActorToIgnore,
-	const FVector& Start,
-	const FVector& End,
-	FHitResult& HitOut,
-	ECollisionChannel CollisionChannel,
-	bool ReturnPhysMat
-	) 
-{
-	if (!World)
-	{
-		return false;
-	}
-
-	FCollisionQueryParams TraceParams(FName(TEXT("VictoreCore Trace")), true, ActorToIgnore);
-	TraceParams.bTraceComplex = true;
-	//TraceParams.bTraceAsyncScene = true;
-	TraceParams.bReturnPhysicalMaterial = ReturnPhysMat;
-
-	//Ignore Actors
-	TraceParams.AddIgnoredActor(ActorToIgnore);
-
-	//Re-initialize hit info
-	HitOut = FHitResult(ForceInit);
-
-	//Trace!
-	World->LineTraceSingle(
-		HitOut,		//result
-		Start,	//start
-		End, //end
-		CollisionChannel, //collision channel
-		TraceParams
-		);
-
-	//Hit any Actor?
-	return (HitOut.GetActor() != NULL);
 }
