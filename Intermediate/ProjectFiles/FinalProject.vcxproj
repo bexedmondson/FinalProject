@@ -250,8 +250,10 @@
     <NMakeOutput>..\..\Binaries\Win64\FinalProject-Win64-Shipping.exe</NMakeOutput>
   </PropertyGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\FinalProject\TestBoid.cpp" />
     <ClCompile Include="..\..\Source\FinalProject\TestBoidController.cpp" />
     <ClCompile Include="..\..\Source\FinalProject\TestGameMode.cpp" />
+    <ClInclude Include="..\..\Source\FinalProject\TestBoid.h" />
     <ClInclude Include="..\..\Source\FinalProject\TestBoidController.h" />
     <ClInclude Include="..\..\Source\FinalProject\TestGameMode.h" />
     <None Include="..\..\FinalProject.uproject" />
