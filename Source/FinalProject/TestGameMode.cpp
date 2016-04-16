@@ -9,6 +9,7 @@
 #include "GoalController.h"
 #include "CoreMisc.h"
 #include "Paths.h"
+#include "DateTime.h"
 
 ATestBoidController* testBoidControllerPtr = NULL;
 int frameCount;
@@ -68,7 +69,7 @@ void ATestGameMode::RunTests()
 	testFileNameString += "TestResults.log";
 	const TCHAR* testFileName = *testFileNameString;
 
-	FString testResultString;
+	FString testResultString = FDateTime::Now().ToString() + "\n";
 
 	testResultString += testBoidControllerPtr->TestGenerateCorrectNumberOfBoids() + "\n";
 	testResultString += testBoidControllerPtr->TestGenerateBoidsOnlyInBox() + "\n";

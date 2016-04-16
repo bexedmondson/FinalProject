@@ -6,7 +6,7 @@
 
 // constants for this file
 static const int NUMBER_OF_BOIDS = 30; //number of boids to be spawned
-static const int SPAWN_CUBE_SIZE = 200; //length of side of boid spawn cube DIVIDED BY TWO
+static const int SPAWN_CUBE_SIZE = 100; //length of side of boid spawn cube DIVIDED BY TWO
 
 // array that stores pointers to all boids
 TArray<ABoid*> boidArray;
