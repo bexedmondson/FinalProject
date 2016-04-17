@@ -37,4 +37,7 @@ protected:
 	void EmptyAgentArray();
 	int GetNumberOfAgents();
 	int GetSpawnSquareSize();
+	void AddAgentToArray(AAgent* agent);
+	void RemoveAgentFromArray(AAgent* agent);
+	FVector GetGlobalBest();
 };

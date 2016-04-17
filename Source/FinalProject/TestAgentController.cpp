@@ -80,3 +80,28 @@ FString ATestAgentController::TestGenerateAgentsOnlyInBox()
 		return errorMessage;
 	}
 }
+
+FString ATestAgentController::TestFindGlobalBest()
+{
+	AAgent* testAgent = Super::SpawnNewAgent();
+	testAgent->SetActorLocation(FVector(0, 0, 100000));
+	testAgent->CheckAgentBest();
+	Super::AddAgentToArray(testAgent);
+
+	Super::FindGlobalBest();
+
+	Super::RemoveAgentFromArray(testAgent);
+	testAgent->Destroy();
+
+	if (Super::GetGlobalBest().Equals(FVector(0, 0, 100000), 2.5))
+	{
+		return "ATestAgentController: TestFindGlobalBest: pass.";
+	}
+	else
+	{
+		FString errorMessage = "ATestAgentController: TestFindGlobalBest: fail.\n";
+		errorMessage += "Expected value: " + FVector(0, 0, 100000).ToCompactString() + "\n";
+		errorMessage += "Actual value:   " + Super::GetGlobalBest().ToCompactString() + "\n";
+		return errorMessage;
+	}
+}

@@ -112,3 +112,21 @@ int AAgentController::GetSpawnSquareSize()
 {
 	return SPAWN_SQUARE_SIZE;
 }
+
+// test function
+void AAgentController::AddAgentToArray(AAgent* agent)
+{
+	agentArray.Add(agent);
+}
+
+// test function
+void AAgentController::RemoveAgentFromArray(AAgent* agent)
+{
+	agentArray.Remove(agent);
+}
+
+// test function
+FVector AAgentController::GetGlobalBest()
+{
+	return globalBest;
+}

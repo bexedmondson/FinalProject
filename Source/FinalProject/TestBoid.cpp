@@ -30,7 +30,7 @@ FString ATestBoid::TestCalculateVelocityInBoxAndAlone()
 
 	ResetBoid();
 
-	if (calculatedVelocity.Equals(FVector::ZeroVector, 2.5))
+	if (calculatedVelocity.Equals(FVector::ZeroVector, 3))
 	{
 		return "TestBoid: TestCalculateVelocityInBoxAndAlone: pass.";
 	}
@@ -53,7 +53,7 @@ FString ATestBoid::TestCalculateVelocityOutOfBoxAndAlone()
 
 	ResetBoid();
 
-	if (calculatedVelocity.Equals(FVector(50, 50, 50), 2.5))
+	if (calculatedVelocity.Equals(FVector(50, 50, 50), 3))
 	{
 		return "TestBoid: TestCalculateVelocityOutOfBoxAndAlone: pass.";
 	}
@@ -77,7 +77,7 @@ FString ATestBoid::TestCalculateVelocityInBoxAndOneInOuterSphere()
 	directionBoid->Destroy();
 	ResetBoid();
 
-	if (calculatedVelocity.Equals(FVector(0.6, 0.6, 0.6), 2.5))
+	if (calculatedVelocity.Equals(FVector(0.6, 0.6, 0.6), 3))
 	{
 		return "TestBoid: TestCalculateVelocityInBoxAndOneInOuterSphere: pass.";
 	}
@@ -101,7 +101,7 @@ FString ATestBoid::TestCalculateVelocityInBoxAndOneInInnerSphere()
 	directionBoid->Destroy();
 	ResetBoid();
 
-	if (calculatedVelocity.Equals(FVector(-0.2, -0.2, -0.2), 2.5))
+	if (calculatedVelocity.Equals(FVector(-0.2, -0.2, -0.2), 3))
 	{
 		return "TestBoid: TestCalculateVelocityInBoxAndOneInInnerSphere: pass.";
 	}

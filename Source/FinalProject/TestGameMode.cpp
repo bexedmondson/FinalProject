@@ -122,6 +122,7 @@ FString ATestGameMode::RunAgentControllerTests()
 
 	agentControllerTestResultString += testAgentControllerPtr->TestGenerateCorrectNumberOfAgents() + "\n";
 	agentControllerTestResultString += testAgentControllerPtr->TestGenerateAgentsOnlyInBox() + "\n";
+	agentControllerTestResultString += testAgentControllerPtr->TestFindGlobalBest() + "\n";
 
 	return agentControllerTestResultString;
 }

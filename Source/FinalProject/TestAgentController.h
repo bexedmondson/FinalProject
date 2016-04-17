@@ -24,4 +24,5 @@ public:
 	
 	FString TestGenerateCorrectNumberOfAgents();
 	FString TestGenerateAgentsOnlyInBox();
+	FString TestFindGlobalBest();
 };
