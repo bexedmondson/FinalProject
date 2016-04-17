@@ -106,6 +106,9 @@
     <ClInclude Include="..\..\Source\FinalProject\TestAgentController.h">
       <Filter>Source\FinalProject</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\FinalProject\TestAgent.h">
+      <Filter>Source\FinalProject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\FinalProject\TestGameMode.cpp">
@@ -118,6 +121,9 @@
       <Filter>Source\FinalProject</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\FinalProject\TestAgentController.cpp">
+      <Filter>Source\FinalProject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\FinalProject\TestAgent.cpp">
       <Filter>Source\FinalProject</Filter>
     </ClCompile>
   </ItemGroup>

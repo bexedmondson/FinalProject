@@ -5,6 +5,7 @@
 #include "TestBoidController.h"
 #include "TestBoid.h"
 #include "TestAgentController.h"
+#include "TestAgent.h"
 #include "InputController.h"
 #include "GoalController.h"
 #include "CoreMisc.h"
@@ -75,6 +76,7 @@ void ATestGameMode::RunTests()
 	testResultString += RunBoidControllerTests() + "\n";
 	testResultString += RunBoidTests() + "\n";
 	testResultString += RunAgentControllerTests() + "\n";
+	testResultString += RunAgentTests() + "\n";
 
 	FFileHelper::SaveStringToFile(testResultString, testFileName);
 
@@ -125,4 +127,18 @@ FString ATestGameMode::RunAgentControllerTests()
 	agentControllerTestResultString += testAgentControllerPtr->TestFindGlobalBest() + "\n";
 
 	return agentControllerTestResultString;
+}
+
+FString ATestGameMode::RunAgentTests()
+{
+	FString agentTestResultString = "";
+
+	//spawn test agent
+	ATestAgent* testAgent = GetWorld()->SpawnActor<ATestAgent>(ATestAgent::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
+
+	agentTestResultString += testAgent->TestCheckAgentBest() + "\n";
+
+	testAgent->Destroy();
+
+	return agentTestResultString;
 }
