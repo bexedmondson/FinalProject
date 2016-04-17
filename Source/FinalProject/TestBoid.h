@@ -24,5 +24,8 @@ public:
 	
 	FString TestCalculateVelocityInBoxAndAlone();
 	FString TestCalculateVelocityOutOfBoxAndAlone();
-	FString TestCalculateVelocityInBoxAndNearOne();
+	FString TestCalculateVelocityInBoxAndOneInOuterSphere();
+	FString TestCalculateVelocityInBoxAndOneInInnerSphere();
+
+	void ResetBoid();
 };

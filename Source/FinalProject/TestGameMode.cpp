@@ -107,7 +107,10 @@ FString ATestGameMode::RunBoidTests()
 	//RESPAWN BOID BEFORE EACH TEST?? WHY IS X DECREASING?
 	boidTestResultString += testBoid->TestCalculateVelocityInBoxAndAlone() + "\n";
 	boidTestResultString += testBoid->TestCalculateVelocityOutOfBoxAndAlone() + "\n";
-	boidTestResultString += testBoid->TestCalculateVelocityInBoxAndNearOne() + "\n";
+	boidTestResultString += testBoid->TestCalculateVelocityInBoxAndOneInOuterSphere() + "\n";
+	boidTestResultString += testBoid->TestCalculateVelocityInBoxAndOneInInnerSphere() + "\n";
+
+	testBoid->Destroy();
 
 	return boidTestResultString;
 }
