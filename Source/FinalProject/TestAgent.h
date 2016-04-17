@@ -14,7 +14,7 @@ class FINALPROJECT_API ATestAgent : public AAgent
 	GENERATED_BODY()
 
 public:
-	ATestAgent(const FObjectInitializer& ObjectInitializer);
+	ATestAgent();
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

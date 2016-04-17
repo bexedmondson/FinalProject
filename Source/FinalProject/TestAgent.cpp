@@ -3,8 +3,8 @@
 #include "FinalProject.h"
 #include "TestAgent.h"
 
-ATestAgent::ATestAgent(const FObjectInitializer& ObjectInitializer)
-	: Super(ObjectInitializer)
+ATestAgent::ATestAgent()
+	: Super()
 {
 
 }
@@ -40,3 +40,7 @@ FString ATestAgent::TestCheckAgentBest()
 		return errorMessage;
 	}
 }
+
+// testing aligntolandscape not possible, as spawning landscape from code is not possible
+
+// testing calculateagentvelocity not possible, as random coefficient means exact test impossible
