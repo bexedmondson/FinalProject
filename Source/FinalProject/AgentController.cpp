@@ -55,7 +55,7 @@ void AAgentController::GenerateAgents()
 {
 	for (int i = 0; i < NUMBER_OF_AGENTS; i++)
 	{
-		//add boid to array for boid algorithm calculations
+		//add agent to array for agent algorithm calculations
 		agentArray.Add(SpawnNewAgent());
 	}
 }
@@ -89,3 +89,26 @@ void AAgentController::FindGlobalBest()
 	}
 }
 
+// test function
+TArray<AAgent*> AAgentController::GetAgentArray()
+{
+	return agentArray;
+}
+
+// test function
+void AAgentController::EmptyAgentArray()
+{
+	agentArray.Empty();
+}
+
+// test function
+int AAgentController::GetNumberOfAgents()
+{
+	return NUMBER_OF_AGENTS;
+}
+
+// test function
+int AAgentController::GetSpawnSquareSize()
+{
+	return SPAWN_SQUARE_SIZE;
+}

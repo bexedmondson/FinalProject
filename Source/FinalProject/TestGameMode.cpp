@@ -4,7 +4,7 @@
 #include "TestGameMode.h"
 #include "TestBoidController.h"
 #include "TestBoid.h"
-#include "AgentController.h"
+#include "TestAgentController.h"
 #include "InputController.h"
 #include "GoalController.h"
 #include "CoreMisc.h"
@@ -12,6 +12,7 @@
 #include "DateTime.h"
 
 ATestBoidController* testBoidControllerPtr = NULL;
+ATestAgentController* testAgentControllerPtr = NULL;
 int frameCount;
 
 ATestGameMode::ATestGameMode(const FObjectInitializer& ObjectInitializer)
@@ -28,7 +29,7 @@ void ATestGameMode::StartPlay()
 	frameCount = 0;
 
 	testBoidControllerPtr = GetWorld()->SpawnActor<ATestBoidController>(ATestBoidController::StaticClass());
-	AAgentController* agentControllerPtr = GetWorld()->SpawnActor<AAgentController>(AAgentController::StaticClass());
+	testAgentControllerPtr = GetWorld()->SpawnActor<ATestAgentController>(ATestAgentController::StaticClass());
 	AGoalController* goalControllerPtr = GetWorld()->SpawnActor<AGoalController>(AGoalController::StaticClass());
 
 	inputControllerPtr->SetBoidControllerPtr(testBoidControllerPtr);
@@ -73,6 +74,7 @@ void ATestGameMode::RunTests()
 
 	testResultString += RunBoidControllerTests() + "\n";
 	testResultString += RunBoidTests() + "\n";
+	testResultString += RunAgentControllerTests() + "\n";
 
 	FFileHelper::SaveStringToFile(testResultString, testFileName);
 
@@ -104,7 +106,6 @@ FString ATestGameMode::RunBoidTests()
 	//spawn test boid
 	ATestBoid* testBoid = GetWorld()->SpawnActor<ATestBoid>(ATestBoid::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
 
-	//RESPAWN BOID BEFORE EACH TEST?? WHY IS X DECREASING?
 	boidTestResultString += testBoid->TestCalculateVelocityInBoxAndAlone() + "\n";
 	boidTestResultString += testBoid->TestCalculateVelocityOutOfBoxAndAlone() + "\n";
 	boidTestResultString += testBoid->TestCalculateVelocityInBoxAndOneInOuterSphere() + "\n";
@@ -113,4 +114,14 @@ FString ATestGameMode::RunBoidTests()
 	testBoid->Destroy();
 
 	return boidTestResultString;
+}
+
+FString ATestGameMode::RunAgentControllerTests()
+{
+	FString agentControllerTestResultString = "";
+
+	agentControllerTestResultString += testAgentControllerPtr->TestGenerateCorrectNumberOfAgents() + "\n";
+	agentControllerTestResultString += testAgentControllerPtr->TestGenerateAgentsOnlyInBox() + "\n";
+
+	return agentControllerTestResultString;
 }

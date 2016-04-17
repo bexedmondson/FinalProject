@@ -34,6 +34,7 @@ protected:
 
 	FString RunBoidControllerTests();
 	FString RunBoidTests();
+	FString RunAgentControllerTests();
 
 	//setup and teardown methods for testing
 };
