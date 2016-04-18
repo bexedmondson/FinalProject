@@ -7,6 +7,7 @@
 #include "TestAgentController.h"
 #include "TestAgent.h"
 #include "TestGoalController.h"
+#include "TestGoal.h"
 #include "InputController.h"
 #include "CoreMisc.h"
 #include "Paths.h"
@@ -79,6 +80,7 @@ void ATestGameMode::RunTests()
 	testResultString += RunAgentControllerTests() + "\n";
 	testResultString += RunAgentTests() + "\n";
 	testResultString += RunGoalControllerTests() + "\n";
+	testResultString += RunGoalTests() + "\n";
 
 	FFileHelper::SaveStringToFile(testResultString, testFileName);
 
@@ -153,4 +155,19 @@ FString ATestGameMode::RunGoalControllerTests()
 	goalControllerTestResultString += testGoalControllerPtr->TestCalculateScores() + "\n";
 
 	return goalControllerTestResultString;
+}
+
+FString ATestGameMode::RunGoalTests()
+{
+	FString goalTestResultString = "";
+
+	//get test goal
+	ATestGoal* testGoal = GetWorld()->SpawnActor<ATestGoal>(ATestGoal::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
+
+	goalTestResultString += testGoal->TestTeamChangeToPlayer() + "\n";
+	goalTestResultString += testGoal->TestTeamChangeToEnemy() + "\n";
+
+	testGoal->Destroy();
+
+	return goalTestResultString;
 }

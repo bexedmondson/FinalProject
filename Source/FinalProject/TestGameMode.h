@@ -37,4 +37,5 @@ protected:
 	FString RunAgentControllerTests();
 	FString RunAgentTests();
 	FString RunGoalControllerTests();
+	FString RunGoalTests();
 };

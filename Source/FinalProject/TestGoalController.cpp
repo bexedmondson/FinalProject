@@ -59,6 +59,12 @@ FString ATestGoalController::TestCalculateScores()
 
 	Super::CalculateScores();
 
+
+	for (int i = 0; i < goalArray.Num(); i++)
+	{
+		goalArray[i]->SetTeam(ETeam::NEUTRAL);
+	}
+
 	if (Super::PlayerGoalScore == 3 && Super::NeutralGoalScore == 4 && Super::EnemyGoalScore == 6)
 	{
 		return "TestGoalController: TestCalculateScores: pass.";
