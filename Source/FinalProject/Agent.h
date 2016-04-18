@@ -34,10 +34,12 @@ public:
 	void SetToBeRespawned();
 	bool ShouldAgentBeRepawned();
 
+	//public for testing purposes
+	void CheckAgentBest();
+
 protected:
 	UStaticMeshComponent* AgentMesh;
 
-	void CheckAgentBest();
 	FVector AlignToLandscape(FVector location);
 
 	FVector CalculateAgentVelocity();

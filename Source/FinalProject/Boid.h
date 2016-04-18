@@ -16,50 +16,39 @@ public:
 	// Sets default values for this actor's properties
 	ABoid(const FObjectInitializer& ObjectInitializer);
 
-
-	/** Boid current movement component */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Movement)
-		FVector currentVelocity;
-
-	/** Boid rotation component */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Movement)
-		FRotator rotation;
-
-
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	// Called every frame
 	virtual void Tick(float DeltaSeconds) override;
 
-
-	FVector CalculateBoidVelocity();
-
 	// for goalseeking
-	FVector target;
 	void SetTarget(FVector boidTarget);
-
-	// Corner of bounding box, set by BoidController
-	FVector boundingBoxCorner;
-
 
 protected:
 	UStaticMeshComponent* BoidMesh;
 
+	// boid current movement component
+	FVector currentVelocity;
+
+	// boid rotation component
+	FRotator rotation;
+
+	// corner of bounding box, set by BoidController
+	FVector boundingBoxCorner;
+
+	//perform boid algorithm
+	FVector CalculateBoidVelocity();
+
+	// functions to calculate main components of boids algorithm
 	FVector SeparateBoid(TArray<FVector> nearbyBoidLocations);
 	FVector AlignBoid(TArray<FRotator> nearbyBoidRotations);
 	FVector CohereBoid(TArray<FVector> nearbyBoidLocations);
 
+	// additions to main boids algorithm to keep flock contained and to enable goalseeking
 	FVector KeepBoidInBox();
-	FVector KeepBoidAboveFloor();
 
-	bool Trace(
-		UWorld* World,
-		AActor* ActorToIgnore,
-		const FVector& Start,
-		const FVector& End,
-		FHitResult& HitOut,
-		ECollisionChannel CollisionChannel = FloorChannel,
-		bool ReturnPhysMat = false
-		);
+	// test functions
+	FVector GetCurrentVelocity();
+	void SetCurrentVelocity(FVector velocity);
 };
