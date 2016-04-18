@@ -6,14 +6,15 @@
 #include "TestBoid.h"
 #include "TestAgentController.h"
 #include "TestAgent.h"
+#include "TestGoalController.h"
 #include "InputController.h"
-#include "GoalController.h"
 #include "CoreMisc.h"
 #include "Paths.h"
 #include "DateTime.h"
 
 ATestBoidController* testBoidControllerPtr = NULL;
 ATestAgentController* testAgentControllerPtr = NULL;
+ATestGoalController* testGoalControllerPtr = NULL;
 int frameCount;
 
 ATestGameMode::ATestGameMode(const FObjectInitializer& ObjectInitializer)
@@ -31,7 +32,7 @@ void ATestGameMode::StartPlay()
 
 	testBoidControllerPtr = GetWorld()->SpawnActor<ATestBoidController>(ATestBoidController::StaticClass());
 	testAgentControllerPtr = GetWorld()->SpawnActor<ATestAgentController>(ATestAgentController::StaticClass());
-	AGoalController* goalControllerPtr = GetWorld()->SpawnActor<AGoalController>(AGoalController::StaticClass());
+	testGoalControllerPtr = GetWorld()->SpawnActor<ATestGoalController>(ATestGoalController::StaticClass());
 
 	inputControllerPtr->SetBoidControllerPtr(testBoidControllerPtr);
 }
@@ -77,6 +78,7 @@ void ATestGameMode::RunTests()
 	testResultString += RunBoidTests() + "\n";
 	testResultString += RunAgentControllerTests() + "\n";
 	testResultString += RunAgentTests() + "\n";
+	testResultString += RunGoalControllerTests() + "\n";
 
 	FFileHelper::SaveStringToFile(testResultString, testFileName);
 
@@ -141,4 +143,14 @@ FString ATestGameMode::RunAgentTests()
 	testAgent->Destroy();
 
 	return agentTestResultString;
+}
+
+FString ATestGameMode::RunGoalControllerTests()
+{
+	FString goalControllerTestResultString = "";
+
+	goalControllerTestResultString += testGoalControllerPtr->TestFindsAllGoalsAtStart() + "\n";
+	goalControllerTestResultString += testGoalControllerPtr->TestCalculateScores() + "\n";
+
+	return goalControllerTestResultString;
 }

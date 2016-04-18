@@ -65,3 +65,8 @@ void AGoalController::CalculateScores()
 	EnemyGoalScore = enemyGoalCount;
 }
 
+// test function
+TArray<AGoal*> AGoalController::GetGoalArray()
+{
+	return goalArray;
+}

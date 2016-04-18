@@ -3,6 +3,7 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
+#include "Goal.h"
 #include "GoalController.generated.h"
 
 UCLASS()
@@ -35,4 +36,7 @@ public:
 protected:
 	
 	void CalculateScores();
+
+	// test function
+	TArray<AGoal*> GetGoalArray();
 };
