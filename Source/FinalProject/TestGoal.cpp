@@ -28,7 +28,7 @@ FString ATestGoal::TestTeamChangeToPlayer()
 
 	TArray<ABoid*> boidArray;
 
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 12; i++)
 	{
 		boidArray.Add(GetWorld()->SpawnActor<ABoid>(ABoid::StaticClass(), FVector(5, 5, 5), FRotator::ZeroRotator));
 	}
@@ -51,7 +51,7 @@ FString ATestGoal::TestTeamChangeToPlayer()
 		FString errorMessage = "TestGoal: TestTeamChangeToPlayer: fail.\n";
 		errorMessage += "Expected value: Player\n";
 		
-		if (team == ETeam::NEUTRAL)
+		if (Super::GetTeam() == ETeam::NEUTRAL)
 		{
 			errorMessage += "Actual value:   Neutral";
 		}
@@ -65,13 +65,14 @@ FString ATestGoal::TestTeamChangeToPlayer()
 
 FString ATestGoal::TestTeamChangeToEnemy()
 {
+	Super::SetActorLocation(FVector(1000, 0, 0));
 	Super::SetTeam(ETeam::NEUTRAL);
 
 	TArray<AAgent*> agentArray;
 
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < 3; i++)
 	{
-		agentArray.Add(GetWorld()->SpawnActor<AAgent>(AAgent::StaticClass(), FVector(5, 5, 5), FRotator::ZeroRotator));
+		agentArray.Add(GetWorld()->SpawnActor<AAgent>(AAgent::StaticClass(), FVector(1005, 0, 0), FRotator::ZeroRotator));
 	}
 
 	Super::CheckForActorsInSphere();
@@ -92,7 +93,7 @@ FString ATestGoal::TestTeamChangeToEnemy()
 		FString errorMessage = "TestGoal: TestTeamChangeToEnemy: fail.\n";
 		errorMessage += "Expected value: Enemy\n";
 
-		if (team == ETeam::NEUTRAL)
+		if (Super::GetTeam() == ETeam::NEUTRAL)
 		{
 			errorMessage += "Actual value:   Neutral";
 		}
@@ -103,3 +104,4 @@ FString ATestGoal::TestTeamChangeToEnemy()
 		return errorMessage;
 	}
 }
+

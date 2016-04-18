@@ -24,5 +24,5 @@ public:
 	
 	FString TestTeamChangeToPlayer();
 	FString TestTeamChangeToEnemy();
-	
+
 };
