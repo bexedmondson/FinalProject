@@ -33,10 +33,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Enum)
 	ETeam team;
 
+	// test functions
+	void SetTeam(ETeam team);
+
 protected:
 	UStaticMeshComponent* GoalMesh;
 
 	void CheckForActorsInSphere();
-
-	FColor GetTeamColour();
 };

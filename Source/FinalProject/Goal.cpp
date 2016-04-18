@@ -105,25 +105,13 @@ void AGoal::CheckForActorsInSphere()
 	}
 }
 
-FColor AGoal::GetTeamColour()
-{
-	if (team == ETeam::PLAYER)
-	{
-		return PLAYER_COLOUR;
-	}
-	else if (team == ETeam::NEUTRAL)
-	{
-		return NEUTRAL_COLOUR;
-	}
-	else if (team == ETeam::ENEMY)
-	{
-		return ENEMY_COLOUR;
-	}
-
-	return FColor::White;
-}
-
 ETeam AGoal::GetTeam()
 {
 	return team;
+}
+
+// test function
+void AGoal::SetTeam(ETeam newTeam)
+{
+	team = newTeam;
 }

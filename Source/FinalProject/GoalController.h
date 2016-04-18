@@ -3,6 +3,7 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
+#include "Goal.h"
 #include "GoalController.generated.h"
 
 UCLASS()
@@ -32,7 +33,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = GoalScore)
 	int32 EnemyGoalScore;
 
-private:
+protected:
 	
 	void CalculateScores();
+
+	// test function
+	TArray<AGoal*> GetGoalArray();
 };
