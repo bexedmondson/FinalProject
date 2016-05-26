@@ -3,8 +3,10 @@
 #include "FinalProject.h"
 #include "InputController.h"
 #include "BoidController.h"
+#include "Arrow.h"
 
 ABoidController* boidControllerPtr;
+AArrow* indicator;
 
 AInputController::AInputController(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
@@ -42,6 +44,11 @@ void AInputController::SetupInputComponent()
 void AInputController::OnLeftClick()
 {
 	FVector clickedPosition = GetClickedPosition();
+
+	if (indicator != NULL) {
+		indicator->Destroy();
+	}
+	indicator = GetWorld()->SpawnActor<AArrow>(AArrow::StaticClass(), clickedPosition, FRotator::ZeroRotator);
 
 	boidControllerPtr->SetControllerTarget(clickedPosition);
 
