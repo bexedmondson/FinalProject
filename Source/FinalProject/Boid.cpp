@@ -15,7 +15,7 @@ static const float ALIGNMENT_COEFFICIENT = 0.04;
 static const float COHESION_COEFFICIENT = 0.04;
 static const float BOUNDING_BOX_COEFFICIENT = 0.005;
 
-static const float MAX_SPEED = 4;
+static const float MAX_SPEED = 6;
 
 static const float BOUNDING_BOX_SIZE = 200;
 static const float AVERAGE_DIST_ABOVE_FLOOR = 100;

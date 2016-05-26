@@ -250,6 +250,7 @@
     <NMakeOutput>..\..\Binaries\Win64\FinalProject-Win64-Shipping.exe</NMakeOutput>
   </PropertyGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\FinalProject\Arrow.cpp" />
     <ClCompile Include="..\..\Source\FinalProject\TestAgent.cpp" />
     <ClCompile Include="..\..\Source\FinalProject\TestAgentController.cpp" />
     <ClCompile Include="..\..\Source\FinalProject\TestBoid.cpp" />
@@ -257,6 +258,7 @@
     <ClCompile Include="..\..\Source\FinalProject\TestGameMode.cpp" />
     <ClCompile Include="..\..\Source\FinalProject\TestGoal.cpp" />
     <ClCompile Include="..\..\Source\FinalProject\TestGoalController.cpp" />
+    <ClInclude Include="..\..\Source\FinalProject\Arrow.h" />
     <ClInclude Include="..\..\Source\FinalProject\TestAgent.h" />
     <ClInclude Include="..\..\Source\FinalProject\TestAgentController.h" />
     <ClInclude Include="..\..\Source\FinalProject\TestBoid.h" />
