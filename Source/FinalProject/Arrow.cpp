@@ -23,7 +23,7 @@ AArrow::AArrow()
 		SetActorEnableCollision(false);
 	}
 
-	static ConstructorHelpers::FObjectFinder<UAnimSequence> anim(TEXT("AnimSequence'/Game/Meshes/arrow2_0_Anim_Cylinder_CylinderAction.arrow2_0_Anim_Cylinder_CylinderAction'"));
+	static ConstructorHelpers::FObjectFinder<UAnimSequence> anim(TEXT("AnimSequence'/Game/Animations/arrow2_0_Anim_Cylinder_CylinderAction.arrow2_0_Anim_Cylinder_CylinderAction'"));
 	bounce = anim.Object;
 }
 
